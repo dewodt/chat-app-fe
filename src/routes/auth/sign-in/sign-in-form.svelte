@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Input } from '$lib/components/ui/input';
 	import * as Form from '$lib/components/ui/form';
-	import { signInFormSchema } from '$lib/schema/zod';
+	import { signInFormSchema } from '$lib/schema/sign-in.js';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 

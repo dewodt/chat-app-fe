@@ -1,4 +1,4 @@
-import { signInFormSchema } from '$lib/schema/zod.js';
+import { signInFormSchema } from '$lib/schema/sign-in.js';
 import type { PageServerLoad } from './$types.js';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';

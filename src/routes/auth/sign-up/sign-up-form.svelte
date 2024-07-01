@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Input } from '$lib/components/ui/input';
 	import * as Form from '$lib/components/ui/form';
-	import { signUpFormSchema } from '$lib/schema/zod';
+	import { signUpFormSchema } from '$lib/schema/sign-up.js';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
@@ -34,14 +34,14 @@
 	</Form.Field>
 
 	<!-- Confirm Password -->
-	<Form.Field {form} name="confirmation">
+	<Form.Field {form} name="confirmPassword">
 		<Form.Control let:attrs>
 			<Form.Label>Confirm Password</Form.Label>
 			<Input
 				placeholder="Confirm Password"
 				type="password"
 				{...attrs}
-				bind:value={$formData.confirmation}
+				bind:value={$formData.confirmPassword}
 			/>
 		</Form.Control>
 		<Form.FieldErrors />
