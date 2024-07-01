@@ -74,5 +74,10 @@
 		min-height: 100vh;
 		height: 1px;
 		display: flex;
+
+		/* Fonts */
+		font-family: 'Inter', sans-serif;
+		font-optical-sizing: auto;
+		font-variation-settings: 'slnt' 0;
 	}
 }
