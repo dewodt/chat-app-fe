@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { Input } from '$lib/components/ui/input';
 	import * as Form from '$lib/components/ui/form';
-	import { signInFormSchema } from '$lib/schema/zod';
+	import { signUpFormSchema } from '$lib/schema/zod';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	export let data: SuperValidated<Infer<typeof signInFormSchema>>;
+	export let data: SuperValidated<Infer<typeof signUpFormSchema>>;
 
 	const form = superForm(data, {
-		validators: zodClient(signInFormSchema)
+		validators: zodClient(signUpFormSchema)
 	});
 
 	const { form: formData, enhance } = form;
@@ -33,14 +33,28 @@
 		<Form.FieldErrors />
 	</Form.Field>
 
-	<!-- Sign In -->
-	<Form.Button class="w-full">Sign In</Form.Button>
+	<!-- Confirm Password -->
+	<Form.Field {form} name="confirmation">
+		<Form.Control let:attrs>
+			<Form.Label>Confirm Password</Form.Label>
+			<Input
+				placeholder="Confirm Password"
+				type="password"
+				{...attrs}
+				bind:value={$formData.confirmation}
+			/>
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
+
+	<!-- Sign Up -->
+	<Form.Button class="w-full">Sign Up</Form.Button>
 
 	<!-- Already have -->
 	<p class="text-center text-sm font-medium">
-		Don't have an account?
-		<a href="/auth/sign-up" class="text-primary hover:underline hover:underline-offset-4">
-			Sign up
+		Already have an account?
+		<a href="/auth/sign-in" class="text-primary hover:underline hover:underline-offset-4">
+			Sign in
 		</a>
 	</p>
 </form>
