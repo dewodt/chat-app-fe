@@ -1,2 +1,15 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+	import Side from '$lib/components/side/side.svelte';
+	import HeadTemplate from '$lib/components/head/head-template.svelte';
+</script>
+
+<HeadTemplate
+	title="Chat App"
+	description="Chat App is a simple chat application that allows you to chat with your friends."
+/>
+
+<div class="flex w-full">
+	<Side />
+
+	<main></main>
+</div>
