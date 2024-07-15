@@ -3,8 +3,8 @@
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import * as Drawer from '$lib/components/ui/drawer/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import EditProfileForm from './edit-profile-form.svelte';
-	import AvatarUser from './avatar-user.svelte';
+	import { UserPlus } from 'lucide-svelte';
+	import AddFriendForm from './add-friend-form.svelte';
 
 	let open = false;
 	const isDesktop = mediaQuery('(min-width: 768px)');
@@ -14,38 +14,40 @@
 	<Dialog.Root bind:open>
 		<!-- Trigger -->
 		<Dialog.Trigger>
-			<AvatarUser />
+			<UserPlus />
 		</Dialog.Trigger>
 
 		<!-- Content -->
 		<Dialog.Content class="sm:max-w-[425px]">
 			<!-- Title -->
 			<Dialog.Header>
-				<Dialog.Title>Edit My Profile</Dialog.Title>
-				<Dialog.Description>Make changes to your profile here.</Dialog.Description>
+				<Dialog.Title>Add New Friend</Dialog.Title>
+				<Dialog.Description>Add a new friend to start a new conversation.</Dialog.Description>
 			</Dialog.Header>
 
 			<!-- Form -->
-			<EditProfileForm />
+			<AddFriendForm />
 		</Dialog.Content>
 	</Dialog.Root>
 {:else}
 	<Drawer.Root bind:open>
 		<!-- Trigger -->
 		<Drawer.Trigger>
-			<AvatarUser />
+			<UserPlus />
 		</Drawer.Trigger>
 
 		<!-- Content -->
 		<Drawer.Content>
 			<!-- Title -->
 			<Drawer.Header class="text-left">
-				<Drawer.Title>Edit profile</Drawer.Title>
-				<Drawer.Description>Make changes to your profile here.</Drawer.Description>
+				<Drawer.Title>Add New Friend</Drawer.Title>
+				<Drawer.Description>
+					Add a new friend by entering their username to start a new conversation.
+				</Drawer.Description>
 			</Drawer.Header>
 
 			<!-- Form -->
-			<EditProfileForm class="px-4" />
+			<AddFriendForm class="px-4" />
 
 			<!-- Cancel -->
 			<Drawer.Footer class="pb-4 pt-2">
