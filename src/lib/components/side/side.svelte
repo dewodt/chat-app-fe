@@ -4,7 +4,7 @@
 	import ButtonNewChat from './button-new-chat.svelte';
 	import AddFriendPopup from './add-friend/add-friend-popup.svelte';
 	import SearchFilter from './search-filter.svelte';
-	import ButtonMore from './button-more.svelte';
+	import MorePopup from './more-popup.svelte';
 </script>
 
 <aside class="flex w-full flex-col lg:max-w-md">
@@ -21,7 +21,7 @@
 			<AddFriendPopup />
 
 			<!-- Ellipsis -->
-			<ButtonMore />
+			<MorePopup />
 		</div>
 	</header>
 

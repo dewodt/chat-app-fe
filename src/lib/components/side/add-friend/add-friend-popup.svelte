@@ -13,8 +13,10 @@
 {#if $isDesktop}
 	<Dialog.Root bind:open>
 		<!-- Trigger -->
-		<Dialog.Trigger>
-			<UserPlus />
+		<Dialog.Trigger asChild let:builder>
+			<Button variant="ghost" size="icon" builders={[builder]}>
+				<UserPlus />
+			</Button>
 		</Dialog.Trigger>
 
 		<!-- Content -->
@@ -32,8 +34,10 @@
 {:else}
 	<Drawer.Root bind:open>
 		<!-- Trigger -->
-		<Drawer.Trigger>
-			<UserPlus />
+		<Drawer.Trigger asChild let:builder>
+			<Button variant="ghost" size="icon" builders={[builder]}>
+				<UserPlus />
+			</Button>
 		</Drawer.Trigger>
 
 		<!-- Content -->
