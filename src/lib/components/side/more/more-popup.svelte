@@ -7,7 +7,7 @@
 <DropdownMenu.Root>
 	<!-- Trigger -->
 	<DropdownMenu.Trigger asChild let:builder>
-		<Button variant="ghost" size="icon" builders={[builder]}>
+		<Button variant="ghost" size="icon" class="rounded-full hover:bg-gray-200" builders={[builder]}>
 			<EllipsisVertical class="text-gray-700" />
 		</Button>
 	</DropdownMenu.Trigger>

@@ -14,7 +14,12 @@
 	<Dialog.Root bind:open>
 		<!-- Trigger -->
 		<Dialog.Trigger asChild let:builder>
-			<Button variant="ghost" size="icon" builders={[builder]}>
+			<Button
+				variant="ghost"
+				size="icon"
+				class="rounded-full hover:bg-gray-200"
+				builders={[builder]}
+			>
 				<UserPlus class="text-gray-700" />
 			</Button>
 		</Dialog.Trigger>
@@ -35,7 +40,12 @@
 	<Drawer.Root bind:open>
 		<!-- Trigger -->
 		<Drawer.Trigger asChild let:builder>
-			<Button variant="ghost" size="icon" builders={[builder]}>
+			<Button
+				variant="ghost"
+				size="icon"
+				class="rounded-full hover:bg-gray-200"
+				builders={[builder]}
+			>
 				<UserPlus class="text-gray-700" />
 			</Button>
 		</Drawer.Trigger>

@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from 'clsx';
+import { differenceInDays } from 'date-fns';
 import { cubicOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
 import { twMerge } from 'tailwind-merge';
@@ -53,4 +54,26 @@ export const flyAndScale = (
 		},
 		easing: cubicOut
 	};
+};
+
+export const getRelativeTime = (datetime: Date): string => {
+	// Get now
+	const now = new Date();
+
+	if (differenceInDays(now, datetime) === 0) {
+		return new Intl.DateTimeFormat('en-US', {
+			hour: 'numeric',
+			minute: 'numeric'
+		}).format(datetime);
+	} else if (differenceInDays(now, datetime) < 7) {
+		return new Intl.DateTimeFormat('en-US', {
+			weekday: 'short'
+		}).format(datetime);
+	} else {
+		return new Intl.DateTimeFormat('en-US', {
+			month: 'numeric',
+			day: 'numeric',
+			year: 'numeric'
+		}).format(datetime);
+	}
 };

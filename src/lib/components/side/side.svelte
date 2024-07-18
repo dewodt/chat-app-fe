@@ -5,11 +5,12 @@
 	import AddFriendPopup from './add-friend/add-friend-popup.svelte';
 	import SearchFilter from './search-filter.svelte';
 	import MorePopup from './more/more-popup.svelte';
+	import { Separator } from '$lib/components/ui/separator';
 </script>
 
-<aside class="flex w-full flex-col lg:max-w-md">
+<aside class="flex w-full flex-col border-r lg:max-w-md">
 	<!-- Top bar -->
-	<header class="flex h-16 flex-row items-center justify-between bg-muted px-4">
+	<header class="flex h-[60px] flex-none flex-row items-center justify-between bg-muted px-4">
 		<!-- Avatar -->
 		<AvatarPopup />
 
@@ -27,6 +28,8 @@
 
 	<!-- Search / Filter chat/user -->
 	<SearchFilter />
+
+	<Separator orientation="horizontal" />
 
 	<!-- Chat list -->
 	<ChatList />
