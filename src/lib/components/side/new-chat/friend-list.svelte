@@ -10,7 +10,7 @@
 </script>
 
 <ScrollArea class={cn('h-80', className)}>
-	<ul class="grid grid-cols-1">
+	<ul class="grid grid-cols-1 lg:mb-6">
 		{#each mockUsers as user, index (user.id)}
 			<li class="flex">
 				<button

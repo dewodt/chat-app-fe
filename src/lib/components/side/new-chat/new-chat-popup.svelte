@@ -25,7 +25,7 @@
 		</Dialog.Trigger>
 
 		<!-- Content -->
-		<Dialog.Content class="gap-2 px-0 sm:max-w-[425px]">
+		<Dialog.Content class="gap-2 px-0 pb-0 sm:max-w-[425px]">
 			<!-- Title -->
 			<Dialog.Header class="px-6">
 				<Dialog.Title>New Chat</Dialog.Title>
