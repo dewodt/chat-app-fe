@@ -15,7 +15,7 @@
 		<!-- Trigger -->
 		<Dialog.Trigger asChild let:builder>
 			<Button variant="ghost" size="icon" builders={[builder]}>
-				<UserPlus />
+				<UserPlus class="text-gray-700" />
 			</Button>
 		</Dialog.Trigger>
 
@@ -36,7 +36,7 @@
 		<!-- Trigger -->
 		<Drawer.Trigger asChild let:builder>
 			<Button variant="ghost" size="icon" builders={[builder]}>
-				<UserPlus />
+				<UserPlus class="text-gray-700" />
 			</Button>
 		</Drawer.Trigger>
 
