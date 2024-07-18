@@ -24,7 +24,9 @@
 						<h4 class="line-clamp-1 text-start text-base font-medium leading-tight">
 							{user.username}
 						</h4>
-						<p class="line-clamp-1 text-start text-sm leading-tight">{user.about}</p>
+						<p class="line-clamp-1 text-start text-sm leading-tight text-muted-foreground">
+							{user.about}
+						</p>
 					</div>
 				</button>
 			</li>

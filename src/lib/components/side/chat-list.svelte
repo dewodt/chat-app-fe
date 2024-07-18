@@ -26,7 +26,7 @@
 							<h4
 								class={cn(
 									'line-clamp-1 text-start text-base leading-tight',
-									isUnread ? 'font-semibold' : 'font-normal'
+									isUnread ? 'font-semibold' : 'font-medium'
 								)}
 							>
 								{chat.title}
@@ -35,7 +35,7 @@
 							<!-- Preview -->
 							<p
 								class={cn(
-									'line-clamp-1 text-start text-sm leading-tight text-gray-600',
+									'line-clamp-1 text-start text-sm leading-tight text-muted-foreground',
 									isUnread ? 'font-semibold' : 'font-normal'
 								)}
 							>
@@ -49,7 +49,7 @@
 						<p
 							class={cn(
 								'text-xs',
-								isUnread ? 'font-bold text-primary' : 'font-medium text-gray-600'
+								isUnread ? 'font-bold text-primary' : 'font-medium text-muted-foreground'
 							)}
 						>
 							{getRelativeTime(chat.datetime)}

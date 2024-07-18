@@ -6,9 +6,9 @@
 <div class="space-y-2.5 bg-white px-3 py-2.5">
 	<!-- Search Input -->
 	<search class="flex flex-row items-center gap-3 rounded-md bg-muted px-3 py-2.5">
-		<Search class="size-5 text-gray-700" />
+		<Search class="size-5 text-muted-foreground" />
 		<input
-			class="w-full bg-transparent text-sm placeholder:text-gray-700 focus-visible:outline-none focus-visible:ring-0"
+			class="w-full bg-transparent text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-0"
 			placeholder="Search"
 		/>
 	</search>
