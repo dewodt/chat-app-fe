@@ -1,10 +1,18 @@
 <script lang="ts">
 	import * as Avatar from '$lib/components/ui/avatar/index.js';
+	import { cn } from '$lib/utils';
 	import { UserRound } from 'lucide-svelte';
+
+	// Props
+	let className = '';
+	export { className as class };
+
+	let avatarURL = '';
+	export { avatarURL as src };
 </script>
 
-<Avatar.Root class="size-10">
-	<Avatar.Image src="https://randomuser.me/api/portraits/men/0.jg" />
+<Avatar.Root class={cn('size-8', className)}>
+	<Avatar.Image src={avatarURL} />
 	<Avatar.Fallback class="bg-gray-400">
 		<UserRound class="stroke-gray-200" />
 	</Avatar.Fallback>

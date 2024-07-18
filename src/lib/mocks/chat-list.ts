@@ -5,8 +5,6 @@ export interface ChatList {
 	preview: string;
 	datetime: string;
 	unreadCount: number;
-	isMentioned: boolean;
-	isGroup: boolean;
 }
 
 export const chatListMock: ChatList[] = [
@@ -16,9 +14,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Alice Smith',
 		preview: 'Are you coming to the party?',
 		datetime: '10:30 AM',
-		unreadCount: 3,
-		isMentioned: false,
-		isGroup: false
+		unreadCount: 3
 	},
 	{
 		id: 2,
@@ -26,9 +22,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Bob Johnson',
 		preview: "Don't forget the meeting tomorrow",
 		datetime: 'Yesterday',
-		unreadCount: 0,
-		isMentioned: true,
-		isGroup: true
+		unreadCount: 0
 	},
 	{
 		id: 3,
@@ -36,9 +30,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Carol Williams',
 		preview: 'Can we reschedule our call?',
 		datetime: '02/07/2024',
-		unreadCount: 1,
-		isMentioned: false,
-		isGroup: false
+		unreadCount: 1
 	},
 	{
 		id: 4,
@@ -46,9 +38,7 @@ export const chatListMock: ChatList[] = [
 		title: 'David Brown',
 		preview: "I'll send you the files later",
 		datetime: 'Monday',
-		unreadCount: 2,
-		isMentioned: false,
-		isGroup: true
+		unreadCount: 2
 	},
 	{
 		id: 5,
@@ -56,9 +46,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Eve Davis',
 		preview: "Let's catch up soon!",
 		datetime: '12:45 PM',
-		unreadCount: 5,
-		isMentioned: true,
-		isGroup: false
+		unreadCount: 5
 	},
 	{
 		id: 6,
@@ -66,9 +54,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Frank Miller',
 		preview: 'Where are you now?',
 		datetime: '03/07/2024',
-		unreadCount: 0,
-		isMentioned: false,
-		isGroup: false
+		unreadCount: 0
 	},
 	{
 		id: 7,
@@ -76,9 +62,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Grace Wilson',
 		preview: 'I need your help with this',
 		datetime: 'Tuesday',
-		unreadCount: 1,
-		isMentioned: false,
-		isGroup: true
+		unreadCount: 1
 	},
 	{
 		id: 8,
@@ -86,9 +70,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Hank Moore',
 		preview: 'Good morning!',
 		datetime: '9:00 AM',
-		unreadCount: 3,
-		isMentioned: true,
-		isGroup: false
+		unreadCount: 3
 	},
 	{
 		id: 9,
@@ -96,9 +78,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Ivy Taylor',
 		preview: 'Did you receive my email?',
 		datetime: '02/07/2024',
-		unreadCount: 2,
-		isMentioned: false,
-		isGroup: false
+		unreadCount: 2
 	},
 	{
 		id: 10,
@@ -106,9 +86,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Jack Anderson',
 		preview: 'Hello, how are you?',
 		datetime: '11:15 AM',
-		unreadCount: 4,
-		isMentioned: false,
-		isGroup: true
+		unreadCount: 4
 	},
 	{
 		id: 11,
@@ -116,9 +94,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Kara Thomas',
 		preview: 'Are you coming to the party?',
 		datetime: 'Yesterday',
-		unreadCount: 1,
-		isMentioned: false,
-		isGroup: false
+		unreadCount: 1
 	},
 	{
 		id: 12,
@@ -126,9 +102,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Liam Jackson',
 		preview: "Don't forget the meeting tomorrow",
 		datetime: 'Monday',
-		unreadCount: 5,
-		isMentioned: false,
-		isGroup: true
+		unreadCount: 5
 	},
 	{
 		id: 13,
@@ -136,9 +110,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Mona White',
 		preview: 'Can we reschedule our call?',
 		datetime: '02/07/2024',
-		unreadCount: 3,
-		isMentioned: false,
-		isGroup: false
+		unreadCount: 3
 	},
 	{
 		id: 14,
@@ -146,9 +118,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Nate Harris',
 		preview: "I'll send you the files later",
 		datetime: '11:30 AM',
-		unreadCount: 0,
-		isMentioned: true,
-		isGroup: true
+		unreadCount: 0
 	},
 	{
 		id: 15,
@@ -156,9 +126,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Olivia Martin',
 		preview: "Let's catch up soon!",
 		datetime: 'Yesterday',
-		unreadCount: 2,
-		isMentioned: false,
-		isGroup: false
+		unreadCount: 2
 	},
 	{
 		id: 16,
@@ -166,9 +134,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Paul Thompson',
 		preview: 'Where are you now?',
 		datetime: '12:00 PM',
-		unreadCount: 4,
-		isMentioned: false,
-		isGroup: true
+		unreadCount: 4
 	},
 	{
 		id: 17,
@@ -176,9 +142,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Quinn Garcia',
 		preview: 'I need your help with this',
 		datetime: 'Tuesday',
-		unreadCount: 1,
-		isMentioned: false,
-		isGroup: false
+		unreadCount: 1
 	},
 	{
 		id: 18,
@@ -186,9 +150,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Rita Martinez',
 		preview: 'Good morning!',
 		datetime: '9:30 AM',
-		unreadCount: 2,
-		isMentioned: false,
-		isGroup: true
+		unreadCount: 2
 	},
 	{
 		id: 19,
@@ -196,9 +158,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Steve Robinson',
 		preview: 'Did you receive my email?',
 		datetime: '03/07/2024',
-		unreadCount: 0,
-		isMentioned: true,
-		isGroup: false
+		unreadCount: 0
 	},
 	{
 		id: 20,
@@ -206,9 +166,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Tina Clark',
 		preview: 'Hello, how are you?',
 		datetime: '10:00 AM',
-		unreadCount: 3,
-		isMentioned: false,
-		isGroup: true
+		unreadCount: 3
 	},
 	{
 		id: 21,
@@ -216,9 +174,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Uma Rodriguez',
 		preview: 'Are you coming to the party?',
 		datetime: '02/07/2024',
-		unreadCount: 1,
-		isMentioned: false,
-		isGroup: false
+		unreadCount: 1
 	},
 	{
 		id: 22,
@@ -226,9 +182,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Victor Lewis',
 		preview: "Don't forget the meeting tomorrow",
 		datetime: 'Yesterday',
-		unreadCount: 4,
-		isMentioned: false,
-		isGroup: true
+		unreadCount: 4
 	},
 	{
 		id: 23,
@@ -236,9 +190,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Wendy Lee',
 		preview: 'Can we reschedule our call?',
 		datetime: '11:45 AM',
-		unreadCount: 0,
-		isMentioned: false,
-		isGroup: false
+		unreadCount: 0
 	},
 	{
 		id: 24,
@@ -246,9 +198,7 @@ export const chatListMock: ChatList[] = [
 		title: 'Xander Walker',
 		preview: "I'll send you the files later",
 		datetime: '03/07/2024',
-		unreadCount: 2,
-		isMentioned: true,
-		isGroup: true
+		unreadCount: 2
 	},
 	{
 		id: 25,
@@ -256,8 +206,6 @@ export const chatListMock: ChatList[] = [
 		title: 'Yara Hall',
 		preview: "Let's catch up soon!",
 		datetime: '12:15 PM',
-		unreadCount: 3,
-		isMentioned: false,
-		isGroup: false
+		unreadCount: 3
 	}
 ];
