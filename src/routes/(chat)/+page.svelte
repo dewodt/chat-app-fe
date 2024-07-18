@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Side from '$lib/components/side/side.svelte';
 	import HeadTemplate from '$lib/components/head/head-template.svelte';
+	import ChatDetail from './chat-detail.svelte';
 </script>
 
 <HeadTemplate
@@ -11,5 +12,5 @@
 <div class="flex w-full">
 	<Side />
 
-	<main>wkwk</main>
+	<ChatDetail />
 </div>

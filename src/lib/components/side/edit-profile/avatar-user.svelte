@@ -11,7 +11,7 @@
 	export { avatarURL as src };
 </script>
 
-<Avatar.Root class={cn('size-8', className)}>
+<Avatar.Root class={cn('size-10', className)}>
 	<Avatar.Image src={avatarURL} />
 	<Avatar.Fallback class="bg-gray-400">
 		<UserRound class="stroke-gray-200" />
