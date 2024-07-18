@@ -9,7 +9,7 @@
 	export { className as class };
 </script>
 
-<ScrollArea class={cn(className)}>
+<ScrollArea class={cn('h-full', className)}>
 	<ul class="grid grid-cols-1">
 		{#each mockChatList as chat (chat.id)}
 			{@const isUnread = chat.unreadCount > 0}
@@ -21,7 +21,7 @@
 						<!-- Avatar -->
 						<AvatarUser class="size-12" />
 
-						<div>
+						<div class="space-y-1">
 							<!-- Title -->
 							<h4
 								class={cn(
@@ -35,8 +35,8 @@
 							<!-- Preview -->
 							<p
 								class={cn(
-									'line-clamp-1 text-start text-sm leading-tight text-muted-foreground',
-									isUnread ? 'font-semibold' : 'font-normal'
+									'line-clamp-1 text-start text-sm leading-tight',
+									isUnread ? 'font-semibold text-gray-600' : 'font-medium text-muted-foreground'
 								)}
 							>
 								{chat.preview}

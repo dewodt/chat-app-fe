@@ -19,11 +19,16 @@
 						index === mockUsers.length - 1 ? 'border-none' : 'border-b'
 					)}
 				>
+					<!-- Avatar -->
 					<AvatarUser class="size-12" />
-					<div>
+
+					<div class="space-y-1">
+						<!-- Title -->
 						<h4 class="line-clamp-1 text-start text-base font-medium leading-tight">
 							{user.username}
 						</h4>
+
+						<!-- Preview -->
 						<p class="line-clamp-1 text-start text-sm leading-tight text-muted-foreground">
 							{user.about}
 						</p>

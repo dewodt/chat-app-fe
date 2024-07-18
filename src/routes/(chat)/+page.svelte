@@ -11,5 +11,5 @@
 <div class="flex w-full">
 	<Side />
 
-	<main></main>
+	<main>wkwk</main>
 </div>
