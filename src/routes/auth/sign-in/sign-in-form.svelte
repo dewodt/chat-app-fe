@@ -15,11 +15,10 @@
 	import { AxiosError } from 'axios';
 	import { toast } from 'svelte-sonner';
 	import { goto } from '$app/navigation';
-	import { error } from '@sveltejs/kit';
 
-	export let data: SuperValidated<SignInRequestBody>;
+	export let initialFormState: SuperValidated<SignInRequestBody>;
 
-	const form = superForm(data, {
+	const form = superForm(initialFormState, {
 		SPA: true,
 		resetForm: false,
 		validators: zodClient(signInFormSchema),

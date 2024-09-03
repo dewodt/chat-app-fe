@@ -27,6 +27,7 @@ export async function signInService(body: SignInRequestBody): Promise<SignInSucc
 /**
  * Sign Up
  */
+export type SignUpFormFields = keyof SignUpRequestBody;
 export type SignUpRequestBody = z.infer<typeof signUpFormSchema>;
 export type SignUpSuccessResponse = SuccessResponseDto<null>;
 export type SignUpErrorResponse = AxiosError<ErrorResponseDto>;

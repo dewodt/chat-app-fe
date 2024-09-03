@@ -22,7 +22,7 @@
 
 			<Card.Content>
 				<!-- Form Component -->
-				<SignInForm data={data.form} />
+				<SignInForm initialFormState={data.form} />
 			</Card.Content>
 		</Card.Root>
 	</section>

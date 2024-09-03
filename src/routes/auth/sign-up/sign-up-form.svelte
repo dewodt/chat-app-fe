@@ -4,14 +4,76 @@
 	import { signUpFormSchema } from '$lib/schema/sign-up.js';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { createMutation } from '@tanstack/svelte-query';
+	import { toast } from 'svelte-sonner';
+	import { AxiosError } from 'axios';
+	import { goto } from '$app/navigation';
+	import {
+		signUpService,
+		type SignUpErrorResponse,
+		type SignUpFormFields,
+		type SignUpRequestBody,
+		type SignUpSuccessResponse
+	} from '$lib/services';
 
-	export let data: SuperValidated<Infer<typeof signUpFormSchema>>;
+	export let initialFormState: SuperValidated<Infer<typeof signUpFormSchema>>;
 
-	const form = superForm(data, {
-		validators: zodClient(signUpFormSchema)
+	const form = superForm(initialFormState, {
+		SPA: true,
+		resetForm: false,
+		validators: zodClient(signUpFormSchema),
+		onUpdate: async ({ form }) => {
+			// onUpdate fires when Success or failure https://superforms.rocks/concepts/events
+			// Invalid
+			if (!form.valid) {
+				return;
+			}
+
+			// Valid
+			const jsonData = $formData;
+			$mutation.mutate(jsonData);
+		}
 	});
 
-	const { form: formData, enhance } = form;
+	const { form: formData, enhance, errors } = form;
+
+	// Mutation
+	const mutation = createMutation<SignUpSuccessResponse, SignUpErrorResponse, SignUpRequestBody>({
+		mutationFn: signUpService,
+		onSuccess: (response) => {
+			// Success toast
+			toast.success('Sign in successfull!', {
+				description: response.message,
+				duration: 5000
+			});
+
+			// Redirect to sign in
+			goto('/auth/sign-in');
+		},
+		onError: (error) => {
+			// Error toast
+			if (error instanceof AxiosError && error.response) {
+				toast.error('Sign in failed!', {
+					description: error.response.data.message,
+					duration: 5000
+				});
+
+				// Error fields
+				const errorFields = error.response.data.errorFields;
+				if (errorFields) {
+					errorFields.forEach((ef) => {
+						// $errors is a writable store
+						$errors[ef.field as SignUpFormFields] = [ef.message];
+					});
+				}
+			} else {
+				toast.error('Sign in failed!', {
+					description: 'An error occurred while signing in.',
+					duration: 5000
+				});
+			}
+		}
+	});
 </script>
 
 <form method="POST" use:enhance class="space-y-5">
@@ -20,6 +82,15 @@
 		<Form.Control let:attrs>
 			<Form.Label>Username</Form.Label>
 			<Input placeholder="Username" {...attrs} bind:value={$formData.username} />
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
+
+	<!-- Name -->
+	<Form.Field {form} name="name">
+		<Form.Control let:attrs>
+			<Form.Label>Name</Form.Label>
+			<Input placeholder="Name" {...attrs} bind:value={$formData.name} />
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>

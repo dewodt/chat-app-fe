@@ -19,9 +19,10 @@
 				<!-- Title -->
 				<h1 class="text-center text-3xl font-bold text-primary">Sign Up</h1>
 			</Card.Header>
+
 			<Card.Content>
 				<!-- Form Component -->
-				<SignUpForm data={data.form} />
+				<SignUpForm initialFormState={data.form} />
 			</Card.Content>
 		</Card.Root>
 	</section>
