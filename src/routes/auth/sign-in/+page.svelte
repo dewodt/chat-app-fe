@@ -19,6 +19,7 @@
 				<!-- Title -->
 				<h1 class="text-center text-3xl font-bold text-primary">Sign In</h1>
 			</Card.Header>
+
 			<Card.Content>
 				<!-- Form Component -->
 				<SignInForm data={data.form} />
