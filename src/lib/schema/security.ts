@@ -1,10 +1,11 @@
 import { z } from 'zod';
 
-export const changePasswordFormSchema = z
+export const securitySchema = z
 	.object({
-		oldPassword: z
+		currentPassword: z
 			.string({ message: 'Password must not be empty' })
 			.min(1, { message: 'Password must not be empty' }),
+
 		newPassword: z
 			.string({ message: 'Password must not be empty' })
 			.min(8, { message: 'Password must be at least 8 characters long' })
@@ -21,6 +22,7 @@ export const changePasswordFormSchema = z
 			.regex(new RegExp('^(?=.*[!@#$%^&*])'), {
 				message: 'Password must contain a special character'
 			}),
+
 		confirmNewPassword: z
 			.string({ message: 'Password must not be empty' })
 			.min(1, { message: 'Password must not be empty' })

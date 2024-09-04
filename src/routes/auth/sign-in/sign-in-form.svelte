@@ -12,9 +12,8 @@
 		signInService
 	} from '$lib/services/auth';
 	import { createMutation } from '@tanstack/svelte-query';
-	import { AxiosError } from 'axios';
-	import { toast } from 'svelte-sonner';
 	import { goto } from '$app/navigation';
+	import { ToastResponseFactory } from '$lib/components/ui/sonner';
 
 	export let initialFormState: SuperValidated<SignInRequestBody>;
 
@@ -40,36 +39,26 @@
 	// Mutation
 	const mutation = createMutation<SignInSuccessResponse, SignInErrorResponse, SignInRequestBody>({
 		mutationFn: signInService,
+		onMutate: () => {
+			// Loading toast
+			ToastResponseFactory.createLoading('Please wait while we sign you in.');
+		},
 		onSuccess: (response) => {
 			// Success toast
-			toast.success('Sign in successfull!', {
-				description: response.message,
-				duration: 5000
-			});
+			ToastResponseFactory.createSuccess(response.message);
 
 			// Redirect to home
 			goto('/');
 		},
 		onError: (error) => {
 			// Error toast
-			if (error instanceof AxiosError && error.response) {
-				toast.error('Sign in failed!', {
-					description: error.response.data.message,
-					duration: 5000
-				});
+			ToastResponseFactory.createError(error);
 
-				// Error fields
-				const errorFields = error.response.data.errorFields;
-				if (errorFields) {
-					errorFields.forEach((ef) => {
-						// $errors is a writable store
-						$errors[ef.field as SignInFormFields] = [ef.message];
-					});
-				}
-			} else {
-				toast.error('Sign in failed!', {
-					description: 'An error occurred while signing in.',
-					duration: 5000
+			// Error fields
+			if (error.response && error.response.data.errorFields) {
+				error.response.data.errorFields.forEach((ef) => {
+					// $errors is a writable store
+					$errors[ef.field as SignInFormFields] = [ef.message];
 				});
 			}
 		}

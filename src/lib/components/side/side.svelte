@@ -10,7 +10,9 @@
 
 <aside class="flex w-full flex-col border-r lg:max-w-md">
 	<!-- Top bar -->
-	<header class="flex h-[60px] flex-none flex-row items-center justify-between bg-muted px-4">
+	<header
+		class="flex h-[60px] flex-none flex-row items-center justify-between border-b bg-muted px-4"
+	>
 		<!-- Avatar -->
 		<AvatarPopup />
 

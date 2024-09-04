@@ -7,6 +7,6 @@ export type SignOutSuccessResponse = SuccessResponseDto<null>;
 export type SignOutErrorResponse = AxiosError<ErrorResponseDto>;
 
 export async function signOutService(): Promise<SignOutSuccessResponse> {
-	const response = await api.post<SignOutSuccessResponse>('/auth/sign-out');
+	const response = await api.get<SignOutSuccessResponse>('/auth/sign-out');
 	return response.data;
 }

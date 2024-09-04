@@ -14,9 +14,9 @@
 	</search>
 
 	<!-- Filters (All, Unread) -->
-	<div class="flex flex-row gap-2">
+	<!-- <div class="flex flex-row gap-2">
 		<Button variant="default" class="h-auto rounded-full px-4 py-1.5 text-sm">All</Button>
 
 		<Button variant="secondary" class="h-auto rounded-full px-4 py-1.5 text-sm">Unread</Button>
-	</div>
+	</div> -->
 </div>

@@ -5,8 +5,6 @@
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { createMutation } from '@tanstack/svelte-query';
-	import { toast } from 'svelte-sonner';
-	import { AxiosError } from 'axios';
 	import { goto } from '$app/navigation';
 	import {
 		signUpService,
@@ -15,6 +13,7 @@
 		type SignUpRequestBody,
 		type SignUpSuccessResponse
 	} from '$lib/services/auth';
+	import { ToastResponseFactory } from '$lib/components/ui/sonner';
 
 	export let initialFormState: SuperValidated<Infer<typeof signUpFormSchema>>;
 
@@ -40,36 +39,27 @@
 	// Mutation
 	const mutation = createMutation<SignUpSuccessResponse, SignUpErrorResponse, SignUpRequestBody>({
 		mutationFn: signUpService,
+		onMutate: () => {
+			// Loading toast
+			ToastResponseFactory.createLoading('Please wait while we sign you in.');
+		},
 		onSuccess: (response) => {
 			// Success toast
-			toast.success('Sign in successfull!', {
-				description: response.message,
-				duration: 5000
-			});
+			ToastResponseFactory.createSuccess(response.message);
 
 			// Redirect to sign in
 			goto('/auth/sign-in');
 		},
 		onError: (error) => {
 			// Error toast
-			if (error instanceof AxiosError && error.response) {
-				toast.error('Sign in failed!', {
-					description: error.response.data.message,
-					duration: 5000
-				});
+			ToastResponseFactory.createError(error);
 
-				// Error fields
-				const errorFields = error.response.data.errorFields;
-				if (errorFields) {
-					errorFields.forEach((ef) => {
-						// $errors is a writable store
-						$errors[ef.field as SignUpFormFields] = [ef.message];
-					});
-				}
-			} else {
-				toast.error('Sign in failed!', {
-					description: 'An error occurred while signing in.',
-					duration: 5000
+			// Error fields
+			// Error fields
+			if (error.response && error.response.data.errorFields) {
+				error.response.data.errorFields.forEach((ef) => {
+					// $errors is a writable store
+					$errors[ef.field as SignUpFormFields] = [ef.message];
 				});
 			}
 		}

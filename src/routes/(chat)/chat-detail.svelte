@@ -10,7 +10,7 @@
 
 <main class="flex flex-auto flex-col">
 	<!-- Header -->
-	<header class="flex h-[60px] flex-none flex-row items-center gap-2.5 bg-muted px-4">
+	<header class="flex h-[60px] flex-none flex-row items-center gap-2.5 border-b bg-muted px-4">
 		<AvatarUser />
 
 		<div class="space-y-0.5">
@@ -23,7 +23,7 @@
 	</header>
 
 	<!-- Content -->
-	<ScrollArea orientation="vertical" class="flex flex-auto border-t">
+	<ScrollArea orientation="vertical" class="flex flex-auto">
 		<ol class="flex flex-col gap-4 px-6 py-6">
 			{#each mockChat as message (message.id)}
 				{#if message.isMine}
