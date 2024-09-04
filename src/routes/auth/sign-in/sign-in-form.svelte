@@ -10,7 +10,7 @@
 		type SignInErrorResponse,
 		type SignInFormFields,
 		signInService
-	} from '$lib/services';
+	} from '$lib/services/auth';
 	import { createMutation } from '@tanstack/svelte-query';
 	import { AxiosError } from 'axios';
 	import { toast } from 'svelte-sonner';

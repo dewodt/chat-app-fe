@@ -14,7 +14,7 @@
 		type SignUpFormFields,
 		type SignUpRequestBody,
 		type SignUpSuccessResponse
-	} from '$lib/services';
+	} from '$lib/services/auth';
 
 	export let initialFormState: SuperValidated<Infer<typeof signUpFormSchema>>;
 

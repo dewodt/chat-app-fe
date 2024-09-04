@@ -3,7 +3,7 @@ export interface BaseResponseDto {
 }
 
 export interface SuccessResponseDto<T> extends BaseResponseDto {
-	data: T | undefined;
+	data: T;
 }
 
 export interface MetaDto {
