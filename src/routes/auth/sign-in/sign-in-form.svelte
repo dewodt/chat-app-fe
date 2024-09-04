@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { Input } from '$lib/components/ui/input';
 	import * as Form from '$lib/components/ui/form';
-	import { type SuperValidated, superForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { defaults, superForm } from 'sveltekit-superforms';
+	import { zod } from 'sveltekit-superforms/adapters';
 	import { signInFormSchema } from '$lib/schema';
 	import {
 		type SignInRequestBody,
@@ -15,12 +15,10 @@
 	import { goto } from '$app/navigation';
 	import { ToastResponseFactory } from '$lib/components/ui/sonner';
 
-	export let initialFormState: SuperValidated<SignInRequestBody>;
-
-	const form = superForm(initialFormState, {
+	const form = superForm(defaults(zod(signInFormSchema)), {
 		SPA: true,
 		resetForm: false,
-		validators: zodClient(signInFormSchema),
+		validators: zod(signInFormSchema),
 		onUpdate: async ({ form }) => {
 			// onUpdate fires when Success or failure https://superforms.rocks/concepts/events
 			// Invalid

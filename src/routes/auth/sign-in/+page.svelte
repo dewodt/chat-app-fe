@@ -1,11 +1,8 @@
 <script lang="ts">
-	import type { PageData } from './$types.js';
 	import SignInForm from './sign-in-form.svelte';
 	import * as Card from '$lib/components/ui/card';
 	import HeadTemplate from '$lib/components/head/head-template.svelte';
 	import ProtectedLayout from '$lib/components/auth/protected-layout.svelte';
-
-	export let data: PageData;
 </script>
 
 <HeadTemplate
@@ -24,7 +21,7 @@
 
 				<Card.Content>
 					<!-- Form Component -->
-					<SignInForm initialFormState={data.form} />
+					<SignInForm />
 				</Card.Content>
 			</Card.Root>
 		</section>

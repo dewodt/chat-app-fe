@@ -2,9 +2,8 @@
 	import { Input } from '$lib/components/ui/input';
 	import * as Form from '$lib/components/ui/form';
 	import { securitySchema } from '$lib/schema';
-	import { superForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { getContext } from 'svelte';
+	import { defaults, superForm } from 'sveltekit-superforms';
+	import { zod } from 'sveltekit-superforms/adapters';
 	import { cn } from '$lib/utils';
 	import {
 		securityService,
@@ -13,7 +12,6 @@
 		type SecurityRequestBody,
 		type SecuritySuccessResponse
 	} from '$lib/services/auth';
-	import { securityFormContextKey, type SecurityFormContextValue } from '$lib/contexts/form';
 	import { createMutation } from '@tanstack/svelte-query';
 	import { ToastResponseFactory } from '$lib/components/ui/sonner/toast-factory';
 
@@ -24,10 +22,9 @@
 	export let onSuccessSubmit: () => void;
 
 	// Form
-	const data = getContext<SecurityFormContextValue>(securityFormContextKey);
-	const form = superForm(data, {
+	const form = superForm(defaults(zod(securitySchema)), {
 		SPA: true,
-		validators: zodClient(securitySchema),
+		validators: zod(securitySchema),
 		resetForm: false,
 		onUpdate: async ({ form }) => {
 			// onUpdate fires when Success or failure https://superforms.rocks/concepts/events

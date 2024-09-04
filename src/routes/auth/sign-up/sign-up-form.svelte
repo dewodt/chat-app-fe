@@ -2,8 +2,8 @@
 	import { Input } from '$lib/components/ui/input';
 	import * as Form from '$lib/components/ui/form';
 	import { signUpFormSchema } from '$lib/schema/sign-up.js';
-	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { superForm, defaults } from 'sveltekit-superforms';
+	import { zod } from 'sveltekit-superforms/adapters';
 	import { createMutation } from '@tanstack/svelte-query';
 	import { goto } from '$app/navigation';
 	import {
@@ -15,12 +15,10 @@
 	} from '$lib/services/auth';
 	import { ToastResponseFactory } from '$lib/components/ui/sonner';
 
-	export let initialFormState: SuperValidated<Infer<typeof signUpFormSchema>>;
-
-	const form = superForm(initialFormState, {
+	const form = superForm(defaults(zod(signUpFormSchema)), {
 		SPA: true,
 		resetForm: false,
-		validators: zodClient(signUpFormSchema),
+		validators: zod(signUpFormSchema),
 		onUpdate: async ({ form }) => {
 			// onUpdate fires when Success or failure https://superforms.rocks/concepts/events
 			// Invalid
