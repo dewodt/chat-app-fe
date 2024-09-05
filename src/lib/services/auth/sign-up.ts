@@ -8,11 +8,11 @@ export type SignUpFormFields = keyof SignUpRequestBody;
 
 export type SignUpRequestBody = z.infer<typeof signUpFormSchema>;
 
-export type SignUpSuccessResponse = SuccessResponseDto<null>;
+export type SignUpSuccessResponseBody = SuccessResponseDto<null>;
 
-export type SignUpErrorResponse = AxiosError<ErrorResponseDto>;
+export type SignUpError = AxiosError<ErrorResponseDto>;
 
-export async function signUpService(body: SignUpRequestBody): Promise<SignUpSuccessResponse> {
-	const response = await api.post<SignUpSuccessResponse>('/auth/sign-up', body);
+export async function signUpService(body: SignUpRequestBody): Promise<SignUpSuccessResponseBody> {
+	const response = await api.post<SignUpSuccessResponseBody>('/auth/sign-up', body);
 	return response.data;
 }

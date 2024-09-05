@@ -8,11 +8,11 @@ export type SignInFormFields = keyof SignInRequestBody;
 
 export type SignInRequestBody = z.infer<typeof signInFormSchema>;
 
-export type SignInSuccessResponse = SuccessResponseDto<Session>;
+export type SignInSuccessResponseBody = SuccessResponseDto<Session>;
 
-export type SignInErrorResponse = AxiosError<ErrorResponseDto>;
+export type SignInError = AxiosError<ErrorResponseDto>;
 
-export async function signInService(body: SignInRequestBody): Promise<SignInSuccessResponse> {
-	const response = await api.post<SignInSuccessResponse>('/auth/sign-in', body);
+export async function signInService(body: SignInRequestBody): Promise<SignInSuccessResponseBody> {
+	const response = await api.post<SignInSuccessResponseBody>('/auth/sign-in', body);
 	return response.data;
 }

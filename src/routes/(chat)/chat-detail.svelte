@@ -1,5 +1,5 @@
 <script lang="ts">
-	import AvatarUser from '$lib/components/side/edit-profile/avatar-user.svelte';
+	import AvatarUser from '$lib/components/side/update-profile/avatar-user.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { SendHorizontal } from 'lucide-svelte';

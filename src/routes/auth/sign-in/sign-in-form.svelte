@@ -6,8 +6,8 @@
 	import { signInFormSchema } from '$lib/schema';
 	import {
 		type SignInRequestBody,
-		type SignInSuccessResponse,
-		type SignInErrorResponse,
+		type SignInSuccessResponseBody,
+		type SignInError,
 		type SignInFormFields,
 		signInService
 	} from '$lib/services/auth';
@@ -35,8 +35,13 @@
 	const { form: formData, enhance, errors } = form;
 
 	// Mutation
-	const mutation = createMutation<SignInSuccessResponse, SignInErrorResponse, SignInRequestBody>({
-		mutationFn: signInService,
+	const mutation = createMutation<SignInSuccessResponseBody, SignInError, SignInRequestBody>({
+		mutationFn: async (body) => {
+			// await new Promise((resolve) => setTimeout(resolve, 5000));
+			// throw new Error('Error');
+			const responseBody = await signInService(body);
+			return responseBody;
+		},
 		onMutate: () => {
 			// Loading toast
 			ToastResponseFactory.createLoading('Please wait while we sign you in.');

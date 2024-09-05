@@ -2,11 +2,19 @@
 	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
 	import { mockChatList } from '$lib/mocks/chat-list';
 	import { cn, getRelativeTime } from '$lib/utils';
-	import AvatarUser from './edit-profile/avatar-user.svelte';
+	import { createInfiniteQuery } from '@tanstack/svelte-query';
+	import AvatarUser from './update-profile/avatar-user.svelte';
 
 	// Props
 	let className = '';
 	export { className as class };
+
+	// const infiniteQuery = createInfiniteQuery({
+	// 	queryKey: ["chat-list"],
+	// 	queryFn: async ({ pageParam}) => {
+
+	// 	},
+	// })
 </script>
 
 <ScrollArea class={cn('h-full', className)}>

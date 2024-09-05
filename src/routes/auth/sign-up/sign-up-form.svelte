@@ -8,10 +8,10 @@
 	import { goto } from '$app/navigation';
 	import {
 		signUpService,
-		type SignUpErrorResponse,
+		type SignUpError,
 		type SignUpFormFields,
 		type SignUpRequestBody,
-		type SignUpSuccessResponse
+		type SignUpSuccessResponseBody
 	} from '$lib/services/auth';
 	import { ToastResponseFactory } from '$lib/components/ui/sonner';
 
@@ -35,8 +35,13 @@
 	const { form: formData, enhance, errors } = form;
 
 	// Mutation
-	const mutation = createMutation<SignUpSuccessResponse, SignUpErrorResponse, SignUpRequestBody>({
-		mutationFn: signUpService,
+	const mutation = createMutation<SignUpSuccessResponseBody, SignUpError, SignUpRequestBody>({
+		mutationFn: async (body) => {
+			// await new Promise((resolve) => setTimeout(resolve, 5000));
+			// throw new Error('Error');
+			const responseBody = await signUpService(body);
+			return responseBody;
+		},
 		onMutate: () => {
 			// Loading toast
 			ToastResponseFactory.createLoading('Please wait while we sign you in.');

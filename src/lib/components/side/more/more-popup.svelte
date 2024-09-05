@@ -5,8 +5,8 @@
 	import { createMutation, useQueryClient } from '@tanstack/svelte-query';
 	import {
 		signOutService,
-		type SignOutErrorResponse,
-		type SignOutSuccessResponse
+		type SignOutError,
+		type SignOutSuccessResponseBody
 	} from '$lib/services/auth';
 	import { goto } from '$app/navigation';
 	import { sessionStore } from '$lib/stores';
@@ -19,11 +19,12 @@
 
 	const queryClient = useQueryClient();
 
-	const mutation = createMutation<SignOutSuccessResponse, SignOutErrorResponse>({
+	const mutation = createMutation<SignOutSuccessResponseBody, SignOutError>({
 		mutationFn: async () => {
 			// await new Promise((resolve) => setTimeout(resolve, 5000));
 			// throw new Error('Failed to sign out');
-			return signOutService();
+			const responseBody = await signOutService();
+			return responseBody;
 		},
 		onMutate(variables) {
 			// Loading toast

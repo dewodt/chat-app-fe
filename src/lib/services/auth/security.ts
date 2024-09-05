@@ -4,15 +4,17 @@ import type { ErrorResponseDto, SuccessResponseDto } from '$types';
 import type { AxiosError } from 'axios';
 import { z } from 'zod';
 
-export type SecurityFormFields = keyof SecurityRequestBody;
+export type UpdateSecurityFormFields = keyof UpdateSecurityRequestBody;
 
-export type SecurityRequestBody = z.infer<typeof securitySchema>;
+export type UpdateSecurityRequestBody = z.infer<typeof securitySchema>;
 
-export type SecuritySuccessResponse = SuccessResponseDto<null>;
+export type UpdateSecuritySuccessResponseBody = SuccessResponseDto<null>;
 
-export type SecurityErrorResponse = AxiosError<ErrorResponseDto>;
+export type UpdateSecurityError = AxiosError<ErrorResponseDto>;
 
-export async function securityService(body: SecurityRequestBody): Promise<SecuritySuccessResponse> {
-	const response = await api.patch<SecuritySuccessResponse>('/auth/security', body);
+export async function updateSecurityService(
+	body: UpdateSecurityRequestBody
+): Promise<UpdateSecuritySuccessResponseBody> {
+	const response = await api.patch<UpdateSecuritySuccessResponseBody>('/auth/security', body);
 	return response.data;
 }

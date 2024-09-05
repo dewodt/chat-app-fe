@@ -1,26 +1,23 @@
 <script lang="ts">
-	import {
-		sessionService,
-		type SessionErrorResponse,
-		type SessionSuccessResponse
-	} from '$lib/services/auth';
+	import { getSessionService, type GetSessionError } from '$lib/services/auth';
 	import { createQuery } from '@tanstack/svelte-query';
 	import { sessionStore } from '$lib/stores/session';
 	import LoadingFill from '../shared/loading-fill.svelte';
 	import ErrorFill from '../shared/error-fill.svelte';
 	import { goto } from '$app/navigation';
+	import type { Session } from '$types';
 
 	export let protectedTo: 'authenticated-only' | 'unauthenticated-only';
 
-	const query = createQuery<SessionSuccessResponse, SessionErrorResponse>({
+	const query = createQuery<Session, GetSessionError>({
 		queryKey: ['session'],
 		retry: 1,
 		refetchOnWindowFocus: false,
 		queryFn: async () => {
 			// await new Promise((resolve) => setTimeout(resolve, 2500));
 			// throw new Error('An error occurred');
-
-			return sessionService();
+			const responseBody = await getSessionService();
+			return responseBody.data;
 		}
 	});
 
@@ -51,7 +48,7 @@
 
 	$: {
 		if ($query.isSuccess) {
-			sessionStore.set($query.data.data);
+			sessionStore.set($query.data);
 		} else {
 			sessionStore.set(null);
 		}
@@ -67,7 +64,7 @@
 	<!-- Other errors -->
 	{#if $query.isError && $query.error.response?.status !== 401}
 		<ErrorFill
-			status={$query.error.response?.status}
+			statusText={$query.error.response?.statusText}
 			message={$query.error.response?.data.message}
 			refetch={$query.refetch}
 		/>
@@ -86,7 +83,7 @@
 	<!-- Other errors -->
 	{#if $query.isError && $query.error.response?.status !== 401}
 		<ErrorFill
-			status={$query.error.response?.status}
+			statusText={$query.error.response?.statusText}
 			message={$query.error.response?.data.message}
 			refetch={$query.refetch}
 		/>

@@ -6,19 +6,21 @@
 	let className = '';
 	export { className as class };
 
-	export let status = 500;
+	export let statusText = 'Internal Server Error';
 
-	export let message = 'Internal Server Error';
+	export let message = 'An error occurred while processing your request.';
 
 	export let refetch: (() => void) | null = null;
 </script>
 
 <main class={cn('flex flex-auto items-center justify-center', className)}>
 	<section class="flex flex-col items-center gap-4">
-		<div class="flex flex-col items-center gap-1.5 text-base font-medium text-destructive">
+		<div
+			class="flex flex-col items-center gap-1.5 text-center text-base font-medium text-destructive"
+		>
 			<div class="flex items-center gap-2">
 				<CircleAlert class="size-5" />
-				<p>Error {status}</p>
+				<p>Error: {statusText}</p>
 			</div>
 			<p>
 				{message}

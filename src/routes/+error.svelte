@@ -3,4 +3,4 @@
 	import ErrorFill from '$lib/components/shared/error-fill.svelte';
 </script>
 
-<ErrorFill message={$page.error?.message} />
+<ErrorFill statusText={'Page Error'} message={$page.error?.message} />

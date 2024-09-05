@@ -7,7 +7,7 @@
 	let className = '';
 	export { className as class };
 
-	let avatarURL = '';
+	let avatarURL: string | null | undefined = '';
 	export { avatarURL as src };
 </script>
 

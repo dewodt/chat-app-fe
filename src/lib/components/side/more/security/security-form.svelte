@@ -6,11 +6,11 @@
 	import { zod } from 'sveltekit-superforms/adapters';
 	import { cn } from '$lib/utils';
 	import {
-		securityService,
-		type SecurityErrorResponse,
-		type SecurityFormFields,
-		type SecurityRequestBody,
-		type SecuritySuccessResponse
+		updateSecurityService,
+		type UpdateSecurityError,
+		type UpdateSecurityFormFields,
+		type UpdateSecurityRequestBody,
+		type UpdateSecuritySuccessResponseBody
 	} from '$lib/services/auth';
 	import { createMutation } from '@tanstack/svelte-query';
 	import { ToastResponseFactory } from '$lib/components/ui/sonner/toast-factory';
@@ -42,17 +42,17 @@
 
 	// Mutation
 	const mutation = createMutation<
-		SecuritySuccessResponse,
-		SecurityErrorResponse,
-		SecurityRequestBody
+		UpdateSecuritySuccessResponseBody,
+		UpdateSecurityError,
+		UpdateSecurityRequestBody
 	>({
 		mutationFn: async (body) => {
 			// await new Promise((resolve) => setTimeout(resolve, 5000));
 			// throw new Error('Error');
-
-			return securityService(body);
+			const responseBody = await updateSecurityService(body);
+			return responseBody;
 		},
-		onMutate(variables) {
+		onMutate() {
 			// Loading toast
 			ToastResponseFactory.createLoading('Please wait while we change your password.');
 		},
@@ -70,7 +70,7 @@
 			if (error.response && error.response.data.errorFields) {
 				error.response.data.errorFields.forEach((ef) => {
 					// $errors is a writable store
-					$errors[ef.field as SecurityFormFields] = [ef.message];
+					$errors[ef.field as UpdateSecurityFormFields] = [ef.message];
 				});
 			}
 		}

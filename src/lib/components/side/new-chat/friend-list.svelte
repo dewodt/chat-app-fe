@@ -2,7 +2,7 @@
 	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
 	import { mockUsers } from '$lib/mocks/user';
 	import { cn } from '$lib/utils';
-	import AvatarUser from '../edit-profile/avatar-user.svelte';
+	import AvatarUser from '../update-profile/avatar-user.svelte';
 
 	// Props
 	let className = '';
