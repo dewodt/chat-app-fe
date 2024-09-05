@@ -14,6 +14,7 @@
 	import { createMutation } from '@tanstack/svelte-query';
 	import { goto } from '$app/navigation';
 	import { ToastResponseFactory } from '$lib/components/ui/sonner';
+	import LoadingText from '$lib/components/shared/loading-text.svelte';
 
 	const form = superForm(defaults(zod(signInFormSchema)), {
 		SPA: true,
@@ -99,7 +100,13 @@
 	</Form.Field>
 
 	<!-- Sign In -->
-	<Form.Button class="w-full" disabled={$mutation.isPending}>Sign In</Form.Button>
+	<Form.Button class="w-full" disabled={$mutation.isPending}>
+		{#if $mutation.isPending}
+			<LoadingText />
+		{:else}
+			<span>Sign In</span>
+		{/if}
+	</Form.Button>
 
 	<!-- Already have -->
 	<p class="text-center text-sm font-medium">

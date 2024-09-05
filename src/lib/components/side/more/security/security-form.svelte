@@ -14,6 +14,7 @@
 	} from '$lib/services/auth';
 	import { createMutation } from '@tanstack/svelte-query';
 	import { ToastResponseFactory } from '$lib/components/ui/sonner/toast-factory';
+	import LoadingText from '$lib/components/shared/loading-text.svelte';
 
 	// Props
 	let className = '';
@@ -124,5 +125,11 @@
 	</Form.Field>
 
 	<!-- Sign In -->
-	<Form.Button class="w-full" disabled={$mutation.isPending}>Change Password</Form.Button>
+	<Form.Button class="w-full" disabled={$mutation.isPending}>
+		{#if $mutation.isPending}
+			<LoadingText />
+		{:else}
+			<span>Change Password</span>
+		{/if}
+	</Form.Button>
 </form>

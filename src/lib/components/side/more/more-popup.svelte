@@ -13,6 +13,7 @@
 	import SecurityPopup from './security/security-popup.svelte';
 	import { writable } from 'svelte/store';
 	import { ToastResponseFactory } from '$lib/components/ui/sonner';
+	import LoadingText from '$lib/components/shared/loading-text.svelte';
 
 	// Dropdown state
 	const isDropdownOpen = writable(false);

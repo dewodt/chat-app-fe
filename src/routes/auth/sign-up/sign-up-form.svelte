@@ -14,6 +14,7 @@
 		type SignUpSuccessResponseBody
 	} from '$lib/services/auth';
 	import { ToastResponseFactory } from '$lib/components/ui/sonner';
+	import LoadingText from '$lib/components/shared/loading-text.svelte';
 
 	const form = superForm(defaults(zod(signUpFormSchema)), {
 		SPA: true,
@@ -112,7 +113,13 @@
 	</Form.Field>
 
 	<!-- Sign Up -->
-	<Form.Button class="w-full">Sign Up</Form.Button>
+	<Form.Button class="w-full">
+		{#if $mutation.isPending}
+			<LoadingText />
+		{:else}
+			<span>Sign Up</span>
+		{/if}
+	</Form.Button>
 
 	<!-- Already have -->
 	<p class="text-center text-sm font-medium">

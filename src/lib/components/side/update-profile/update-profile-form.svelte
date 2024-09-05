@@ -16,6 +16,7 @@
 	import { ToastResponseFactory } from '$lib/components/ui/sonner';
 	import InputAvatar from '$lib/components/side/update-profile/input-avatar.svelte';
 	import type { User } from '$types';
+	import LoadingText from '$lib/components/shared/loading-text.svelte';
 
 	// Props
 	let className = '';
@@ -148,6 +149,10 @@
 		class="w-full"
 		disabled={!isTainted($tainted) || isUploadingImage || $mutation.isPending}
 	>
-		Save Changes
+		{#if $mutation.isPending}
+			<LoadingText />
+		{:else}
+			<span>Save Changes</span>
+		{/if}
 	</Form.Button>
 </form>

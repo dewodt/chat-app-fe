@@ -3,6 +3,6 @@
 </script>
 
 <div class="flex flex-row items-center gap-2">
-	<LoaderCircle />
+	<LoaderCircle class="size-4 animate-spin" />
 	<span>Loading...</span>
 </div>
