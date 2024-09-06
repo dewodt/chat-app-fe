@@ -2,7 +2,6 @@
 	import Side from '$lib/components/side/side.svelte';
 	import HeadTemplate from '$lib/components/shared/head-template.svelte';
 	import ChatDetail from '../../lib/components/chat/chat-detail.svelte';
-	import ProtectedLayout from '$lib/components/auth/protected-layout.svelte';
 </script>
 
 <HeadTemplate

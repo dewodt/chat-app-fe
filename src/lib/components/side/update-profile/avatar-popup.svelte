@@ -4,7 +4,7 @@
 	import * as Drawer from '$lib/components/ui/drawer/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import EditProfileForm from './update-profile-form.svelte';
-	import AvatarUser from './avatar-user.svelte';
+	import AvatarUser from '../../shared/avatar-user.svelte';
 	import { createQuery } from '@tanstack/svelte-query';
 	import { getProfileDataService, type GetProfileDataError } from '$lib/services/users';
 	import LoadingFill from '$lib/components/shared/loading-fill.svelte';

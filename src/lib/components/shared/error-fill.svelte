@@ -16,7 +16,7 @@
 <div class={cn('flex flex-auto items-center justify-center', className)}>
 	<div class="flex flex-col items-center gap-4">
 		<div
-			class="flex flex-col items-center gap-1.5 text-center text-base font-medium text-destructive"
+			class="flex flex-col items-center gap-1 text-center text-base font-medium text-destructive"
 		>
 			<div class="flex items-center gap-2">
 				<CircleAlert class="size-5" />

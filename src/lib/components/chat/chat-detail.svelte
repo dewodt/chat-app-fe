@@ -1,5 +1,5 @@
 <script lang="ts">
-	import AvatarUser from '$lib/components/side/update-profile/avatar-user.svelte';
+	import AvatarUser from '$lib/components/shared/avatar-user.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { SendHorizontal } from 'lucide-svelte';
@@ -8,7 +8,7 @@
 	import { getFormattedTime } from '$lib/utils';
 </script>
 
-<main class="flex flex-auto flex-col">
+<main class="flex h-screen flex-auto flex-col">
 	<!-- Header -->
 	<header class="flex h-[60px] flex-none flex-row items-center gap-2.5 border-b bg-muted px-4">
 		<AvatarUser />

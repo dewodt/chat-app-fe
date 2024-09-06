@@ -7,15 +7,12 @@
 	} from '$lib/services/users/find-user';
 	import { cn } from '$lib/utils';
 	import { createInfiniteQuery, type InfiniteData, type QueryKey } from '@tanstack/svelte-query';
-	import AvatarUser from '../update-profile/avatar-user.svelte';
-	import { CircleAlert, Search } from 'lucide-svelte';
+	import AvatarUser from '../../shared/avatar-user.svelte';
+	import { Search } from 'lucide-svelte';
 	import LoadingFill from '$lib/components/shared/loading-fill.svelte';
 	import ErrorFill from '$lib/components/shared/error-fill.svelte';
 	import IntersectionObserver from 'svelte-intersection-observer';
-
-	// Props
-	let className = '';
-	export { className as class };
+	import WarningFill from '$lib/components/shared/warning-fill.svelte';
 
 	export let debouncedSearch: string;
 
@@ -91,16 +88,11 @@
 
 	{#if $query.isSuccess}
 		{#if allUsers.length === 0}
-			<div
-				class="flex h-80 flex-col items-center justify-center gap-1 pb-7 text-center text-muted-foreground"
-			>
-				<CircleAlert class="size-6" />
-				<p>No users found</p>
-			</div>
+			<WarningFill class="h-80" message="No users found" />
 		{:else}
 			<IntersectionObserver {root} {element} threshold={1} bind:intersecting={isIntersecting}>
 				<div bind:this={root}>
-					<ScrollArea class={cn('h-80', className)}>
+					<ScrollArea class="h-80">
 						<ul class="grid grid-cols-1">
 							{#each allUsers as user, index (user.id)}
 								<li class="flex">
