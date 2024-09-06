@@ -3,7 +3,7 @@
 	import * as Form from '$lib/components/ui/form';
 	import { superForm, defaults } from 'sveltekit-superforms';
 	import { zod } from 'sveltekit-superforms/adapters';
-	import { updateProfileSchema } from '$lib/schema';
+	import { updateProfileSchema } from '$lib/schemas';
 	import { cn } from '$lib/utils';
 	import {
 		updateProfileDataService,

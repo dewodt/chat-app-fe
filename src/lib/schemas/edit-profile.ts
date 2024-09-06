@@ -28,8 +28,8 @@ export const updateProfileSchema = z.object({
 
 	about: z
 		.string({ message: 'About must be a string' })
-		.max(160, 'About must be at most 160 characters')
-		.nullable(),
+		.min(1, 'About must not be empty')
+		.max(140, 'About must be at most 140 characters'),
 
 	avatarUrl: z
 		.string({ message: 'Avatar URL must be a string' })

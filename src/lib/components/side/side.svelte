@@ -2,7 +2,6 @@
 	import ChatList from './chat-list.svelte';
 	import AvatarPopup from './update-profile/avatar-popup.svelte';
 	import ButtonNewChat from './new-chat/new-chat-popup.svelte';
-	import AddFriendPopup from './add-friend/add-friend-popup.svelte';
 	import SearchFilter from './search-filter.svelte';
 	import MorePopup from './more/more-popup.svelte';
 	import { Separator } from '$lib/components/ui/separator';
@@ -19,9 +18,6 @@
 		<div class="flex flex-row gap-2">
 			<!-- Add new chat (from friend list) -->
 			<ButtonNewChat />
-
-			<!-- Add new friend -->
-			<AddFriendPopup />
 
 			<!-- Ellipsis -->
 			<MorePopup />

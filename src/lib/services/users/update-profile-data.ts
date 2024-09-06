@@ -1,5 +1,5 @@
 import { api } from '$lib/api';
-import type { updateProfileSchema } from '$lib/schema';
+import type { updateProfileSchema } from '$lib/schemas';
 import type { ErrorResponseDto, SuccessResponseDto, User } from '$types';
 import type { AxiosError } from 'axios';
 import { z } from 'zod';

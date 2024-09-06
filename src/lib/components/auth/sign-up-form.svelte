@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Input } from '$lib/components/ui/input';
 	import * as Form from '$lib/components/ui/form';
-	import { signUpFormSchema } from '$lib/schema/sign-up.js';
+	import { signUpFormSchema } from '$lib/schemas/sign-up.js';
 	import { superForm, defaults } from 'sveltekit-superforms';
 	import { zod } from 'sveltekit-superforms/adapters';
 	import { createMutation } from '@tanstack/svelte-query';

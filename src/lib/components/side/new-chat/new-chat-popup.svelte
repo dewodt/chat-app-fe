@@ -4,14 +4,37 @@
 	import * as Drawer from '$lib/components/ui/drawer/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { MessageSquarePlus } from 'lucide-svelte';
-	import FriendList from './friend-list.svelte';
+	import UserList from './user-list.svelte';
+	import Input from '$lib/components/ui/input/input.svelte';
+	import { debounce } from '$lib/debounce';
+	import { writable } from 'svelte/store';
+	import { useQueryClient } from '@tanstack/svelte-query';
 
-	let open = false;
 	const isDesktop = mediaQuery('(min-width: 768px)');
+
+	// Search value
+	const search = writable<string>('');
+	const debouncedSearch = debounce<string>(search, 300);
+
+	// Handle toggle
+	let open = false;
+	const queryClient = useQueryClient();
+	const handleToggle = (newState: boolean) => {
+		open = newState;
+
+		// Reset search
+		if (!newState) {
+			$search = '';
+
+			queryClient.removeQueries({
+				queryKey: ['find-users']
+			});
+		}
+	};
 </script>
 
 {#if $isDesktop}
-	<Dialog.Root bind:open>
+	<Dialog.Root bind:open onOpenChange={handleToggle}>
 		<!-- Trigger -->
 		<Dialog.Trigger asChild let:builder>
 			<Button
@@ -25,19 +48,23 @@
 		</Dialog.Trigger>
 
 		<!-- Content -->
-		<Dialog.Content class="gap-2 px-0 pb-0 sm:max-w-[425px]">
+		<Dialog.Content class="gap-0 px-0 pb-0 sm:max-w-[480px]">
 			<!-- Title -->
-			<Dialog.Header class="px-6">
-				<Dialog.Title>New Chat</Dialog.Title>
-				<Dialog.Description>Create a new conversation.</Dialog.Description>
+			<Dialog.Header class="space-y-3 border-b px-6 pb-4">
+				<div class="space-y-1.5">
+					<Dialog.Title>New Chat</Dialog.Title>
+					<Dialog.Description>Create a new conversation.</Dialog.Description>
+				</div>
+
+				<Input bind:value={$search} placeholder="Search username" />
 			</Dialog.Header>
 
-			<!-- Friend List -->
-			<FriendList />
+			<!-- User List -->
+			<UserList debouncedSearch={$debouncedSearch} />
 		</Dialog.Content>
 	</Dialog.Root>
 {:else}
-	<Drawer.Root bind:open>
+	<Drawer.Root bind:open onOpenChange={handleToggle}>
 		<!-- Trigger -->
 		<Drawer.Trigger asChild let:builder>
 			<Button
@@ -53,13 +80,17 @@
 		<!-- Content -->
 		<Drawer.Content>
 			<!-- Title -->
-			<Drawer.Header class="text-left">
-				<Drawer.Title>New Chat</Drawer.Title>
-				<Drawer.Description>Create a new conversation.</Drawer.Description>
+			<Drawer.Header class="gap-0 space-y-3 border-b text-left">
+				<div class="space-y-1.5">
+					<Drawer.Title>New Chat</Drawer.Title>
+					<Drawer.Description>Create a new conversation.</Drawer.Description>
+				</div>
+
+				<Input bind:value={$search} placeholder="Search username" />
 			</Drawer.Header>
 
-			<!-- Friend List -->
-			<FriendList />
+			<!-- User List -->
+			<UserList debouncedSearch={$debouncedSearch} />
 
 			<!-- Cancel -->
 			<Drawer.Footer class="pb-4 pt-2">

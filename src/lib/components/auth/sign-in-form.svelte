@@ -3,7 +3,7 @@
 	import * as Form from '$lib/components/ui/form';
 	import { defaults, superForm } from 'sveltekit-superforms';
 	import { zod } from 'sveltekit-superforms/adapters';
-	import { signInFormSchema } from '$lib/schema';
+	import { signInFormSchema } from '$lib/schemas';
 	import {
 		type SignInRequestBody,
 		type SignInSuccessResponseBody,

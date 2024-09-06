@@ -11,7 +11,7 @@
 		type UploadAvatarSuccessResponseBody
 	} from '$lib/services/users';
 	import { ToastResponseFactory } from '$lib/components/ui/sonner';
-	import { avatarSchema } from '$lib/schema';
+	import { avatarSchema } from '$lib/schemas';
 	import type { ChangeEventHandler } from 'svelte/elements';
 
 	// Props (bind)

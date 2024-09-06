@@ -1,5 +1,5 @@
 import { api } from '$lib/api';
-import type { securitySchema } from '$lib/schema';
+import type { securitySchema } from '$lib/schemas';
 import type { ErrorResponseDto, SuccessResponseDto } from '$types';
 import type { AxiosError } from 'axios';
 import { z } from 'zod';

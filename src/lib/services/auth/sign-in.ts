@@ -1,5 +1,5 @@
 import { api } from '$lib/api';
-import type { signInFormSchema } from '$lib/schema';
+import type { signInFormSchema } from '$lib/schemas';
 import type { ErrorResponseDto, Session, SuccessResponseDto } from '$types';
 import type { AxiosError } from 'axios';
 import { z } from 'zod';

@@ -13,8 +13,8 @@
 	export let refetch: (() => void) | null = null;
 </script>
 
-<main class={cn('flex flex-auto items-center justify-center', className)}>
-	<section class="flex flex-col items-center gap-4">
+<div class={cn('flex flex-auto items-center justify-center', className)}>
+	<div class="flex flex-col items-center gap-4">
 		<div
 			class="flex flex-col items-center gap-1.5 text-center text-base font-medium text-destructive"
 		>
@@ -32,5 +32,5 @@
 				<span>Retry</span>
 			</Button>
 		{/if}
-	</section>
-</main>
+	</div>
+</div>
