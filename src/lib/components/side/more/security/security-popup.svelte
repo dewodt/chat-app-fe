@@ -6,45 +6,41 @@
 	import SecurityForm from './security-form.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Lock } from 'lucide-svelte';
-	import type { Writable } from 'svelte/store';
 	import type { CustomEventHandler } from 'bits-ui';
 
-	export let isDropdownOpen: Writable<boolean>;
+	export let isDropdownOpen: boolean;
 
-	let isDialogDrawerOpen = false;
+	let isSecurityPopupOpen: boolean = false;
 
-	const isDesktop = mediaQuery('(min-width: 768px)');
+	const isDesktop = mediaQuery('(min-width: 1024px)');
 
 	const handleToggleDialogDrawer = (newOpen: boolean) => {
-		isDialogDrawerOpen = newOpen;
+		isSecurityPopupOpen = newOpen;
 
 		if (!newOpen) {
 			setTimeout(() => {
-				$isDropdownOpen = false;
+				isDropdownOpen = false;
 			}, 150);
 		}
 	};
 
 	const handleCloseDialogDrawer = () => {
-		isDialogDrawerOpen = false;
+		isSecurityPopupOpen = false;
 
 		setTimeout(() => {
-			$isDropdownOpen = false;
+			isDropdownOpen = false;
 		}, 150);
 	};
 
 	const handleOpenDialogDrawer = (e: CustomEventHandler) => {
 		e.preventDefault();
-		isDialogDrawerOpen = true;
+
+		isSecurityPopupOpen = true;
 	};
 </script>
 
 {#if $isDesktop}
-	<Dialog.Root
-		bind:open={isDialogDrawerOpen}
-		onOpenChange={handleToggleDialogDrawer}
-		closeOnEscape={false}
-	>
+	<Dialog.Root bind:open={isSecurityPopupOpen} onOpenChange={handleToggleDialogDrawer}>
 		<!-- Trigger -->
 		<Dialog.Trigger asChild>
 			<DropdownMenu.Item on:click={handleOpenDialogDrawer}>
@@ -66,7 +62,7 @@
 		</Dialog.Content>
 	</Dialog.Root>
 {:else}
-	<Drawer.Root bind:open={isDialogDrawerOpen} onOpenChange={handleToggleDialogDrawer}>
+	<Drawer.Root bind:open={isSecurityPopupOpen} onOpenChange={handleToggleDialogDrawer}>
 		<!-- Trigger -->
 		<Drawer.Trigger class="w-full">
 			<DropdownMenu.Item on:click={handleOpenDialogDrawer}>

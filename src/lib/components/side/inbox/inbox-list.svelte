@@ -13,6 +13,8 @@
 	import IntersectionObserver from 'svelte-intersection-observer';
 	import { Scrollbar } from '../../ui/scroll-area';
 	import WarningFill from '$lib/components/shared/warning-fill.svelte';
+	import type { ChatInbox } from '$types';
+	import { selectedChatStore } from '$lib/stores';
 
 	// Props
 	export let debouncedSearch: string;
@@ -43,7 +45,7 @@
 			}
 		},
 		queryFn: async ({ pageParam }) => {
-			await new Promise((resolve) => setTimeout(resolve, 2000));
+			// await new Promise((resolve) => setTimeout(resolve, 2000));
 			// throw new Error('An error occurred while fetching users');
 
 			// Get initial chat inbox
@@ -67,6 +69,13 @@
 			$query.fetchNextPage();
 		}
 	}
+
+	const handleSelectChat = (chat: ChatInbox) => {
+		if ($selectedChatStore && $selectedChatStore.chatId === chat.chatId) {
+			return;
+		}
+		selectedChatStore.set(chat);
+	};
 </script>
 
 {#if $query.isPending}
@@ -89,11 +98,15 @@
 			<div bind:this={root} class="flex h-1 flex-auto">
 				<ScrollArea class="flex flex-auto">
 					<ul class="grid grid-cols-1">
-						{#each allChatInbox as chat (chat.chatId)}
+						{#each allChatInbox as chat, index (chat.chatId)}
 							{@const isUnread = chat.unreadCount > 0}
 							<li class="flex">
 								<button
-									class="flex flex-auto flex-row items-center justify-between gap-3 border-b px-4 py-3 transition-all duration-150 ease-in-out hover:bg-muted"
+									class={cn(
+										'flex flex-auto flex-row items-center justify-between gap-3 border-b px-4 py-3 transition-all duration-150 ease-in-out hover:bg-muted',
+										index === allChatInbox.length - 1 ? 'border-none' : 'border-b'
+									)}
+									on:click={() => handleSelectChat(chat)}
 								>
 									<div class="flex flex-row items-center gap-3">
 										<!-- Avatar -->

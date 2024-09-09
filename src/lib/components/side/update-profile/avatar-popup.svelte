@@ -16,7 +16,7 @@
 		open = false;
 	};
 
-	const isDesktop = mediaQuery('(min-width: 768px)');
+	const isDesktop = mediaQuery('(min-width: 1024px)');
 
 	// Get initial form data
 	const query = createQuery<ProfileData, GetProfileDataError>({
@@ -72,7 +72,7 @@
 	<Drawer.Root bind:open>
 		<!-- Trigger -->
 		<Drawer.Trigger>
-			<AvatarUser />
+			<AvatarUser src={$query.data?.avatarUrl} />
 		</Drawer.Trigger>
 
 		<!-- Content -->

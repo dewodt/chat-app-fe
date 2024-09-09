@@ -1,7 +1,7 @@
 <script lang="ts">
 	import InboxList from './inbox/inbox-list.svelte';
 	import AvatarPopup from './update-profile/avatar-popup.svelte';
-	import ButtonNewChat from './new-chat/new-chat-popup.svelte';
+	import NewChatPopup from './new-chat/new-chat-popup.svelte';
 	import SearchFilter from './inbox/search-filter.svelte';
 	import MorePopup from './more/more-popup.svelte';
 	import { Separator } from '$lib/components/ui/separator';
@@ -13,7 +13,7 @@
 	const debouncedSearch = debounce(search, 300);
 </script>
 
-<aside class="flex h-screen w-full flex-col border-r lg:max-w-md">
+<aside class="flex h-screen w-full flex-auto flex-col border-r lg:max-w-md">
 	<!-- Top bar -->
 	<header
 		class="flex h-[60px] flex-none flex-row items-center justify-between border-b bg-muted px-4"
@@ -23,7 +23,7 @@
 
 		<div class="flex flex-row gap-2">
 			<!-- Add new chat (from friend list) -->
-			<ButtonNewChat />
+			<NewChatPopup />
 
 			<!-- Ellipsis -->
 			<MorePopup />

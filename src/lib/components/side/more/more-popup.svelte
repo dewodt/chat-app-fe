@@ -11,12 +11,10 @@
 	import { goto } from '$app/navigation';
 	import { sessionStore } from '$lib/stores';
 	import SecurityPopup from './security/security-popup.svelte';
-	import { writable } from 'svelte/store';
 	import { ToastResponseFactory } from '$lib/components/ui/sonner';
-	import LoadingText from '$lib/components/shared/loading-text.svelte';
 
 	// Dropdown state
-	const isDropdownOpen = writable(false);
+	let isDropdownOpen: boolean = false;
 
 	const queryClient = useQueryClient();
 
@@ -51,7 +49,7 @@
 	});
 </script>
 
-<DropdownMenu.Root bind:open={$isDropdownOpen}>
+<DropdownMenu.Root bind:open={isDropdownOpen} closeOnEscape={false}>
 	<!-- Trigger -->
 	<DropdownMenu.Trigger asChild let:builder>
 		<Button variant="ghost" size="icon" class="rounded-full hover:bg-gray-200" builders={[builder]}>
@@ -63,7 +61,7 @@
 	<DropdownMenu.Content align="end">
 		<DropdownMenu.Group>
 			<!-- Security -->
-			<SecurityPopup {isDropdownOpen} />
+			<SecurityPopup bind:isDropdownOpen />
 
 			<!-- Sign Out -->
 			<DropdownMenu.Item

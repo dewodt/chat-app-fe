@@ -1,56 +1,216 @@
 <script lang="ts">
 	import AvatarUser from '$lib/components/shared/avatar-user.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import Input from '$lib/components/ui/input/input.svelte';
-	import { SendHorizontal } from 'lucide-svelte';
-	import { mockChat } from '$lib/mocks/chat';
+	import { ChevronLeft } from 'lucide-svelte';
 	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
-	import { getFormattedTime } from '$lib/utils';
+	import { getGrouppedMessageKey } from '$lib/utils';
+	import { closeChat, selectedChatStore } from '$lib/stores';
+	import { createInfiniteQuery, type InfiniteData, type QueryKey } from '@tanstack/svelte-query';
+	import {
+		type GetChatMessageSuccessResponseBody,
+		type GetChatMessageError,
+		getChatMessageService
+	} from '$lib/services/chats';
+	import LoadingFill from '../shared/loading-fill.svelte';
+	import ErrorFill from '../shared/error-fill.svelte';
+	import WarningFill from '../shared/warning-fill.svelte';
+	import IntersectionObserver from 'svelte-intersection-observer';
+	import MyMessage from './message/my-message.svelte';
+	import OppositeMessage from './message/opposite-message.svelte';
+	import { afterUpdate, onMount } from 'svelte';
+	import SendMessageForm from './send-message-form.svelte';
+
+	// Component rerender every time selectedChatStore changes
+
+	// Intersection observer
+	let root: HTMLElement;
+	let element: HTMLElement;
+	let isIntersecting = false;
+
+	// Scroll
+	let scrollViewport: HTMLDivElement;
+	let scrollContent: HTMLDivElement;
+
+	let isInitialChatOpen = true;
+	let isNormalScrollState = true;
+	let prevScrollHeight: number;
+
+	// Get initial messages
+	const limit = 15;
+	$: query = createInfiniteQuery<
+		GetChatMessageSuccessResponseBody,
+		GetChatMessageError,
+		InfiniteData<GetChatMessageSuccessResponseBody>,
+		QueryKey,
+		number
+	>({
+		initialPageParam: 1,
+		refetchOnWindowFocus: false,
+		enabled: !!selectedChatStore,
+		retry: 1,
+		queryKey: ['chat-message', $selectedChatStore?.chatId],
+		getNextPageParam: (lastPage) => {
+			if (lastPage.meta.page < lastPage.meta.totalPage) {
+				return lastPage.meta.page + 1;
+			} else {
+				return undefined;
+			}
+		},
+		queryFn: async ({ pageParam }) => {
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+			// throw new Error('An error occurred while fetching chat messages');
+
+			// Get initial chat messages
+			const responseBody = await getChatMessageService($selectedChatStore!.chatId, {
+				page: pageParam,
+				limit
+			});
+
+			return responseBody;
+		}
+	});
+
+	// $: {
+	// 	console.log('===============');
+	// 	console.log(scrollContent.scrollHeight);
+	// 	console.log(scrollContent.clientHeight);
+	// 	console.log(scrollContent.offsetHeight);
+	// 	console.log(scrollViewport.scrollHeight);
+	// 	console.log(scrollViewport.clientHeight);
+	// 	console.log(scrollViewport.offsetHeight);
+	// 	console.log(prevScrollHeight);
+	// 	console.log('===============');
+	// }
+
+	// Fetch more messages when intersecting
+	$: {
+		if (isIntersecting && $query.hasNextPage) {
+			$query.fetchNextPage();
+		}
+	}
+
+	// Flattened messages
+	$: allSortedMessages = $query.data?.pages.flatMap((page) => page.data).reverse() ?? [];
+
+	// Scroll to bottom everytime initial chat is open
+	$: {
+		if (isInitialChatOpen && scrollViewport && scrollContent) {
+			scrollViewport.scrollTop = scrollViewport.scrollHeight - scrollViewport.clientHeight;
+			isInitialChatOpen = false;
+		}
+	}
+
+	// Maintain scroll position when fetching next page
+	afterUpdate(() => {
+		if (!scrollViewport || !scrollContent) {
+			// nothing
+		} else if (isNormalScrollState && !$query.isFetchingNextPage) {
+			// normal scroll state
+		} else if (isNormalScrollState && $query.isFetchingNextPage) {
+			// starts fetching next page
+			isNormalScrollState = false;
+			prevScrollHeight = scrollViewport.scrollHeight;
+		} else if (!isNormalScrollState && !$query.isFetchingNextPage) {
+			// done fetching next page
+			isNormalScrollState = true;
+			scrollViewport.scrollTop = scrollViewport.scrollHeight - prevScrollHeight;
+		}
+	});
 </script>
 
-<main class="flex h-screen flex-auto flex-col">
-	<!-- Header -->
-	<header class="flex h-[60px] flex-none flex-row items-center gap-2.5 border-b bg-muted px-4">
-		<AvatarUser />
+{#if $selectedChatStore}
+	<main class="flex h-screen flex-auto flex-col">
+		<!-- Header -->
+		<header class="flex h-[60px] flex-none flex-row items-center gap-3 border-b bg-muted pl-2 pr-4">
+			<!-- Back -->
+			<Button
+				variant="ghost"
+				size="icon"
+				class="rounded-full hover:bg-gray-200"
+				on:click={closeChat}
+			>
+				<ChevronLeft class="text-gray-700" />
+			</Button>
 
-		<div class="space-y-0.5">
-			<!-- Title -->
-			<h4 class="line-clamp-1 text-start text-sm font-medium">Dewantoro Triatmojo</h4>
+			<!-- Avatar -->
+			<AvatarUser src={$selectedChatStore.avatarUrl} />
 
-			<!-- Preview -->
-			<p class="line-clamp-1 text-start text-xs text-muted-foreground">This is my status</p>
-		</div>
-	</header>
+			<div class="space-y-0.5">
+				<!-- Title -->
+				<h4 class="line-clamp-1 text-start text-base font-medium">{$selectedChatStore.title}</h4>
 
-	<!-- Content -->
-	<ScrollArea orientation="vertical" class="flex flex-auto">
-		<ol class="flex flex-col gap-4 px-6 py-6">
-			{#each mockChat as message (message.id)}
-				{#if message.isMine}
-					<li
-						class="w-fit max-w-2xl self-end rounded-lg bg-primary px-3 py-2 text-primary-foreground"
-					>
-						<p>{message.message}</p>
-						<p class="text-end text-[10px] font-medium">{getFormattedTime(message.datetime)}</p>
-					</li>
-				{:else}
-					<li
-						class="w-fit max-w-2xl self-start rounded-lg bg-secondary px-3 py-2 text-secondary-foreground"
-					>
-						<p>{message.message}</p>
-						<p class="text-end text-[10px] font-medium">{getFormattedTime(message.datetime)}</p>
-					</li>
-				{/if}
-			{/each}
-		</ol>
-	</ScrollArea>
+				<!-- Status -->
+			</div>
+		</header>
 
-	<!-- Message Input -->
-	<section class="flex flex-row gap-3 border-t bg-muted px-5 py-3">
-		<Input placeholder="Type a message" class="focus-visible:ring-0 focus-visible:ring-offset-0" />
+		{#if $query.isPending}
+			<LoadingFill />
+		{/if}
 
-		<Button size="icon" class="flex-none">
-			<SendHorizontal class="size-5" />
-		</Button>
-	</section>
-</main>
+		{#if $query.isError}
+			<ErrorFill
+				statusText={$query.error.response?.statusText}
+				message={$query.error.response?.data.message}
+				refetch={$query.refetch}
+			/>
+		{/if}
+
+		{#if $query.isSuccess}
+			{#if allSortedMessages.length === 0}
+				<WarningFill message="No messages found" />
+			{:else}
+				<IntersectionObserver threshold={1} {root} {element} bind:intersecting={isIntersecting}>
+					<div bind:this={root} class="flex h-1 flex-auto">
+						<!-- Content -->
+						<ScrollArea
+							orientation="vertical"
+							class="flex flex-auto"
+							bind:scrollViewport
+							bind:scrollContent
+						>
+							<ol class="flex flex-col gap-4 px-6 py-6">
+								<!-- First sentinel -->
+								<li bind:this={element}>
+									{#if $query.isFetchingNextPage}
+										<LoadingFill class="py-5" />
+									{/if}
+								</li>
+
+								{#each allSortedMessages as message, index (message.messageId)}
+									{#if index == 0}
+										<li class="text-center text-sm text-gray-600">
+											{getGrouppedMessageKey(new Date(message.createdAt))}
+										</li>
+									{:else}
+										{@const prevMessage = allSortedMessages[index - 1]}
+										{@const prevGroup = getGrouppedMessageKey(new Date(prevMessage.createdAt))}
+										{@const currGroup = getGrouppedMessageKey(new Date(message.createdAt))}
+										{@const isSameGroup = currGroup === prevGroup}
+										{#if !isSameGroup}
+											<li class="text-center text-sm text-gray-600">
+												{getGrouppedMessageKey(new Date(message.createdAt))}
+											</li>
+										{/if}
+									{/if}
+
+									{#if message.isCurrentUserSender}
+										<li class="self-end">
+											<MyMessage {message} />
+										</li>
+									{:else}
+										<li class="self-start">
+											<OppositeMessage {message} />
+										</li>
+									{/if}
+								{/each}
+							</ol>
+						</ScrollArea>
+					</div>
+				</IntersectionObserver>
+			{/if}
+		{/if}
+
+		<!-- Message Input -->
+		<SendMessageForm />
+	</main>
+{/if}

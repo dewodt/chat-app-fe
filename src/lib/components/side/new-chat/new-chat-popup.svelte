@@ -10,7 +10,7 @@
 	import { writable } from 'svelte/store';
 	import { useQueryClient } from '@tanstack/svelte-query';
 
-	const isDesktop = mediaQuery('(min-width: 768px)');
+	const isDesktop = mediaQuery('(min-width: 1024px)');
 
 	// Search value
 	const search = writable<string>('');
@@ -34,7 +34,7 @@
 </script>
 
 {#if $isDesktop}
-	<Dialog.Root bind:open onOpenChange={handleToggle}>
+	<Dialog.Root bind:open onOpenChange={handleToggle} onOutsideClick={() => handleToggle(false)}>
 		<!-- Trigger -->
 		<Dialog.Trigger asChild let:builder>
 			<Button
@@ -64,7 +64,7 @@
 		</Dialog.Content>
 	</Dialog.Root>
 {:else}
-	<Drawer.Root bind:open onOpenChange={handleToggle}>
+	<Drawer.Root bind:open onOpenChange={handleToggle} onOutsideClick={() => handleToggle(false)}>
 		<!-- Trigger -->
 		<Drawer.Trigger asChild let:builder>
 			<Button
@@ -93,7 +93,7 @@
 			<UserList debouncedSearch={$debouncedSearch} />
 
 			<!-- Cancel -->
-			<Drawer.Footer class="pb-4 pt-2">
+			<Drawer.Footer class="border-t pb-4 pt-3">
 				<Drawer.Close asChild let:builder>
 					<Button variant="outline" builders={[builder]}>Cancel</Button>
 				</Drawer.Close>
