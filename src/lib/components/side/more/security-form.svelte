@@ -19,8 +19,7 @@
 	// Props
 	let className = '';
 	export { className as class };
-
-	export let onSuccessSubmit: () => void;
+	export let isSecurityOpen: boolean;
 
 	// Form
 	const form = superForm(defaults(zod(securitySchema)), {
@@ -61,7 +60,7 @@
 			// Success Toast
 			ToastResponseFactory.createSuccess(response.message);
 
-			onSuccessSubmit();
+			isSecurityOpen = false;
 		},
 		onError: (error) => {
 			// Error toast

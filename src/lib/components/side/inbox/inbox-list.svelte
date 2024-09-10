@@ -103,8 +103,11 @@
 							<li class="flex">
 								<button
 									class={cn(
-										'flex flex-auto flex-row items-center justify-between gap-3 border-b px-4 py-3 transition-all duration-150 ease-in-out hover:bg-muted',
-										index === allChatInbox.length - 1 ? 'border-none' : 'border-b'
+										'flex flex-auto flex-row items-center justify-between gap-3 border-b px-4 py-3',
+										index === allChatInbox.length - 1 ? 'border-none' : 'border-b',
+										$selectedChatStore?.chatId === chat.chatId
+											? 'bg-muted'
+											: 'bg-background transition-all hover:bg-muted'
 									)}
 									on:click={() => handleSelectChat(chat)}
 								>
@@ -128,11 +131,13 @@
 												class={cn(
 													'line-clamp-1 text-start text-sm leading-tight',
 													isUnread
-														? 'font-semibold text-gray-600'
+														? 'font-semibold text-gray-600 dark:text-gray-300'
 														: 'font-medium text-muted-foreground'
 												)}
 											>
-												{chat.lastMessage.content}
+												{chat.lastMessage.deletedAt
+													? 'This message was deleted'
+													: chat.lastMessage.content}
 											</p>
 										</div>
 									</div>
@@ -151,7 +156,7 @@
 										<!-- Chat count -->
 										{#if isUnread}
 											<div
-												class="flex size-5 items-center justify-center rounded-full bg-primary text-xs font-medium text-white"
+												class="flex size-5 items-center justify-center rounded-full bg-primary text-xs font-medium text-primary-foreground"
 											>
 												{chat.unreadCount}
 											</div>
@@ -170,8 +175,6 @@
 							{/if}
 						</li>
 					</ul>
-
-					<Scrollbar orientation="vertical" />
 				</ScrollArea>
 			</div>
 		</IntersectionObserver>

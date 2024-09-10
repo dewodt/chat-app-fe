@@ -20,6 +20,9 @@
 	export let isSubmitting: Readonly<boolean>;
 	export let inputAvatarError: string[] | undefined;
 
+	// Input ref
+	let fileInput: HTMLInputElement | undefined;
+
 	// Mutation
 	const mutation = createMutation<
 		UploadAvatarSuccessResponseBody,
@@ -85,17 +88,34 @@
 	const onDeleteAvatar = () => {
 		avatarUrl = null;
 	};
+
+	// Handle avatar click
+	const handleAvatarClick = () => {
+		if (!fileInput) {
+			return;
+		}
+		fileInput.click();
+	};
 </script>
 
 <div class="flex flex-col items-center gap-4 sm:flex-row sm:items-center">
 	<!-- Avatar Preview -->
-	<Avatar.Root class="size-24">
-		<Avatar.Image src={avatarUrl} alt="Avatar Upload Preview" class="object-cover object-center" />
-		<Avatar.Fallback>
-			<UserRound class="size-16 stroke-gray-500" />
-		</Avatar.Fallback>
-	</Avatar.Root>
-
+	<button
+		type="button"
+		disabled={$mutation.isPending || isUploadingImage}
+		on:click={handleAvatarClick}
+	>
+		<Avatar.Root class="size-24">
+			<Avatar.Image
+				src={avatarUrl}
+				alt="Avatar Upload Preview"
+				class="object-cover object-center"
+			/>
+			<Avatar.Fallback>
+				<UserRound class="size-16 stroke-gray-500" />
+			</Avatar.Fallback>
+		</Avatar.Root>
+	</button>
 	<div class="flex w-full flex-row gap-4 sm:w-auto">
 		<!-- File Upload -->
 		<Input
@@ -103,6 +123,7 @@
 			accept="image/*"
 			class="file:text-foreground"
 			disabled={isSubmitting || isUploadingImage}
+			bind:ref={fileInput}
 			on:change={onUploadAvatar}
 		/>
 

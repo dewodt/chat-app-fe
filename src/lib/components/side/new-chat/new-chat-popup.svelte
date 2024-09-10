@@ -19,31 +19,27 @@
 	// Handle toggle
 	let open = false;
 	const queryClient = useQueryClient();
-	const handleToggle = (newState: boolean) => {
-		open = newState;
-
-		// Reset search
-		if (!newState) {
+	$: {
+		if (!open) {
 			$search = '';
-
 			queryClient.removeQueries({
 				queryKey: ['find-users']
 			});
 		}
-	};
+	}
 </script>
 
 {#if $isDesktop}
-	<Dialog.Root bind:open onOpenChange={handleToggle} onOutsideClick={() => handleToggle(false)}>
+	<Dialog.Root bind:open>
 		<!-- Trigger -->
 		<Dialog.Trigger asChild let:builder>
 			<Button
 				variant="ghost"
 				size="icon"
-				class="rounded-full hover:bg-gray-200"
+				class="rounded-full text-muted-foreground hover:bg-gray-200 dark:hover:bg-gray-700"
 				builders={[builder]}
 			>
-				<MessageSquarePlus class="text-gray-700" />
+				<MessageSquarePlus />
 			</Button>
 		</Dialog.Trigger>
 
@@ -64,16 +60,16 @@
 		</Dialog.Content>
 	</Dialog.Root>
 {:else}
-	<Drawer.Root bind:open onOpenChange={handleToggle} onOutsideClick={() => handleToggle(false)}>
+	<Drawer.Root bind:open>
 		<!-- Trigger -->
 		<Drawer.Trigger asChild let:builder>
 			<Button
 				variant="ghost"
 				size="icon"
-				class="rounded-full hover:bg-gray-200"
+				class="rounded-full text-muted-foreground hover:bg-gray-200 dark:hover:bg-gray-700"
 				builders={[builder]}
 			>
-				<MessageSquarePlus class="text-gray-700" />
+				<MessageSquarePlus />
 			</Button>
 		</Drawer.Trigger>
 

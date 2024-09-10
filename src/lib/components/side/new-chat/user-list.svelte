@@ -98,7 +98,7 @@
 								<li class="flex">
 									<button
 										class={cn(
-											'flex flex-auto flex-row items-center gap-3 px-4 py-3 transition-all duration-150 ease-in-out hover:bg-muted lg:px-6',
+											'flex flex-auto flex-row items-center gap-3 px-4 py-3 transition-all hover:bg-muted lg:px-6',
 											index === allUsers.length - 1 ? 'border-none' : 'border-b'
 										)}
 									>

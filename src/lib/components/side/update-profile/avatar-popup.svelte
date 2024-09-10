@@ -11,12 +11,9 @@
 	import ErrorFill from '$lib/components/shared/error-fill.svelte';
 	import type { ProfileData } from '$types';
 
-	let open = false;
-	const handleClose = () => {
-		open = false;
-	};
-
 	const isDesktop = mediaQuery('(min-width: 1024px)');
+
+	let isEditProfileOpen = false;
 
 	// Get initial form data
 	const query = createQuery<ProfileData, GetProfileDataError>({
@@ -33,7 +30,7 @@
 </script>
 
 {#if $isDesktop}
-	<Dialog.Root bind:open>
+	<Dialog.Root bind:open={isEditProfileOpen}>
 		<!-- Trigger -->
 		<Dialog.Trigger>
 			<AvatarUser src={$query.data?.avatarUrl} />
@@ -64,12 +61,12 @@
 
 			<!-- Form -->
 			{#if $query.isSuccess}
-				<EditProfileForm initialProfileData={$query.data} onSuccessSubmit={handleClose} />
+				<EditProfileForm initialProfileData={$query.data} bind:isEditProfileOpen />
 			{/if}
 		</Dialog.Content>
 	</Dialog.Root>
 {:else}
-	<Drawer.Root bind:open>
+	<Drawer.Root bind:open={isEditProfileOpen}>
 		<!-- Trigger -->
 		<Drawer.Trigger>
 			<AvatarUser src={$query.data?.avatarUrl} />
@@ -100,11 +97,7 @@
 
 			<!-- Form -->
 			{#if $query.isSuccess}
-				<EditProfileForm
-					class="px-4"
-					initialProfileData={$query.data}
-					onSuccessSubmit={handleClose}
-				/>
+				<EditProfileForm class="px-4" initialProfileData={$query.data} bind:isEditProfileOpen />
 			{/if}
 
 			<!-- Cancel -->

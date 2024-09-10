@@ -23,13 +23,15 @@
 	// Component rerender every time selectedChatStore changes
 
 	// Intersection observer
-	let root: HTMLElement;
-	let element: HTMLElement;
+	let root: HTMLElement | undefined;
+	let element: HTMLElement | undefined;
 	let isIntersecting = false;
 
 	// Scroll
-	let scrollViewport: HTMLDivElement;
-	let scrollContent: HTMLDivElement;
+	let scrollViewport: HTMLDivElement | undefined;
+	let scrollContent: HTMLDivElement | undefined;
+	let scrollBar: HTMLDivElement | undefined;
+	let scrollThumb: HTMLDivElement | undefined;
 
 	let isInitialChatOpen = true;
 	let isNormalScrollState = true;
@@ -94,9 +96,20 @@
 
 	// Scroll to bottom everytime initial chat is open
 	$: {
-		if (isInitialChatOpen && scrollViewport && scrollContent) {
-			scrollViewport.scrollTop = scrollViewport.scrollHeight - scrollViewport.clientHeight;
+		if (isInitialChatOpen && scrollViewport && scrollContent && root) {
 			isInitialChatOpen = false;
+
+			// scroll viewport
+			scrollViewport.scrollTop = scrollViewport.scrollHeight - scrollViewport.clientHeight;
+
+			// // scroll thumb
+			// if (scrollThumb) {
+			// 	const initialThumbHeight =
+			// 		(scrollViewport.clientHeight * scrollViewport.clientHeight) / scrollContent.scrollHeight;
+			// 	const initialTranslateY = scrollViewport.clientHeight - initialThumbHeight;
+			// 	console.log(initialTranslateY);
+			// 	scrollThumb.style.transform = `translate3d(0px, ${initialTranslateY}px, 0px);`;
+			// }
 		}
 	}
 
@@ -126,10 +139,10 @@
 			<Button
 				variant="ghost"
 				size="icon"
-				class="rounded-full hover:bg-gray-200"
+				class="rounded-full text-muted-foreground hover:bg-gray-200 dark:hover:bg-gray-700"
 				on:click={closeChat}
 			>
-				<ChevronLeft class="text-gray-700" />
+				<ChevronLeft />
 			</Button>
 
 			<!-- Avatar -->
@@ -167,6 +180,8 @@
 							class="flex flex-auto"
 							bind:scrollViewport
 							bind:scrollContent
+							bind:scrollBar
+							bind:scrollThumb
 						>
 							<ol class="flex flex-col gap-4 px-6 py-6">
 								<!-- First sentinel -->
@@ -178,7 +193,7 @@
 
 								{#each allSortedMessages as message, index (message.messageId)}
 									{#if index == 0}
-										<li class="text-center text-sm text-gray-600">
+										<li class="text-center text-sm text-muted-foreground">
 											{getGrouppedMessageKey(new Date(message.createdAt))}
 										</li>
 									{:else}
@@ -187,7 +202,7 @@
 										{@const currGroup = getGrouppedMessageKey(new Date(message.createdAt))}
 										{@const isSameGroup = currGroup === prevGroup}
 										{#if !isSameGroup}
-											<li class="text-center text-sm text-gray-600">
+											<li class="text-center text-sm text-muted-foreground">
 												{getGrouppedMessageKey(new Date(message.createdAt))}
 											</li>
 										{/if}

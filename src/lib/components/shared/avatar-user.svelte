@@ -13,7 +13,7 @@
 
 <Avatar.Root class={cn('size-10', className)}>
 	<Avatar.Image src={avatarURL} />
-	<Avatar.Fallback class="bg-gray-400">
+	<Avatar.Fallback class="bg-gray-400 dark:bg-gray-500">
 		<UserRound class="stroke-gray-200" />
 	</Avatar.Fallback>
 </Avatar.Root>

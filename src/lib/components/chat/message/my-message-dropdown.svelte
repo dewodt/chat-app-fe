@@ -8,17 +8,23 @@
 	export { className as class };
 	export let isDropdownOpen: boolean;
 	export let isEditOpen: boolean;
+	export let isDeleteOpen: boolean;
 
 	const handleEdit = () => {
 		isDropdownOpen = false;
 		isEditOpen = true;
+	};
+
+	const handleDelete = () => {
+		isDropdownOpen = false;
+		isDeleteOpen = true;
 	};
 </script>
 
 <DropdownMenu.Root bind:open={isDropdownOpen}>
 	<DropdownMenu.Trigger
 		class={cn(
-			'rounded-full p-1.5 transition-all duration-200',
+			'rounded-full p-1.5 transition-all',
 			isDropdownOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
 			className
 		)}
@@ -33,7 +39,10 @@
 				<span>Edit</span>
 			</DropdownMenu.Item>
 
-			<DropdownMenu.Item class="text-destructive data-[highlighted]:text-destructive">
+			<DropdownMenu.Item
+				class="text-destructive data-[highlighted]:text-destructive"
+				on:click={handleDelete}
+			>
 				<Trash2 class="mr-2 size-4" />
 				<span>Delete</span>
 			</DropdownMenu.Item>

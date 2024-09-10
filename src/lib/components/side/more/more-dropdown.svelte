@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
-	import { EllipsisVertical, LogOut } from 'lucide-svelte';
+	import { EllipsisVertical, Lock, LogOut } from 'lucide-svelte';
 	import { createMutation, useQueryClient } from '@tanstack/svelte-query';
 	import {
 		signOutService,
@@ -10,14 +10,14 @@
 	} from '$lib/services/auth';
 	import { goto } from '$app/navigation';
 	import { sessionStore } from '$lib/stores';
-	import SecurityPopup from './security/security-popup.svelte';
+	import SecurityPopup from './security-popup.svelte';
 	import { ToastResponseFactory } from '$lib/components/ui/sonner';
 
 	// Dropdown state
 	let isDropdownOpen: boolean = false;
+	let isSecurityOpen: boolean = false;
 
 	const queryClient = useQueryClient();
-
 	const mutation = createMutation<SignOutSuccessResponseBody, SignOutError>({
 		mutationFn: async () => {
 			// await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -47,13 +47,23 @@
 			ToastResponseFactory.createError(error);
 		}
 	});
+
+	const handleOpenSecurity = () => {
+		isDropdownOpen = false;
+		isSecurityOpen = true;
+	};
 </script>
 
-<DropdownMenu.Root bind:open={isDropdownOpen} closeOnEscape={false}>
+<DropdownMenu.Root bind:open={isDropdownOpen}>
 	<!-- Trigger -->
 	<DropdownMenu.Trigger asChild let:builder>
-		<Button variant="ghost" size="icon" class="rounded-full hover:bg-gray-200" builders={[builder]}>
-			<EllipsisVertical class="text-gray-700" />
+		<Button
+			variant="ghost"
+			size="icon"
+			class="rounded-full text-muted-foreground hover:bg-gray-200 dark:hover:bg-gray-700"
+			builders={[builder]}
+		>
+			<EllipsisVertical />
 		</Button>
 	</DropdownMenu.Trigger>
 
@@ -61,7 +71,10 @@
 	<DropdownMenu.Content align="end">
 		<DropdownMenu.Group>
 			<!-- Security -->
-			<SecurityPopup bind:isDropdownOpen />
+			<DropdownMenu.Item on:click={handleOpenSecurity}>
+				<Lock class="mr-2 size-4" />
+				<span>Security</span>
+			</DropdownMenu.Item>
 
 			<!-- Sign Out -->
 			<DropdownMenu.Item
@@ -75,3 +88,6 @@
 		</DropdownMenu.Group>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>
+
+<!-- Security -->
+<SecurityPopup bind:isSecurityOpen />

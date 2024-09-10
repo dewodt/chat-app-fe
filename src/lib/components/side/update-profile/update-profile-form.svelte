@@ -24,7 +24,7 @@
 
 	export let initialProfileData: UpdateProfileDataRequestBody;
 
-	export let onSuccessSubmit: () => void;
+	export let isEditProfileOpen: boolean;
 
 	// Form
 	const form = superForm(defaults(initialProfileData, zod(updateProfileSchema)), {
@@ -70,7 +70,7 @@
 			queryClient.setQueryData<User>(['profile-data'], response.data);
 
 			// Callback
-			onSuccessSubmit();
+			isEditProfileOpen = false;
 		},
 		onError: (error) => {
 			// Error Toast
