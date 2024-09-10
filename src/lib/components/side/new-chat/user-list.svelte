@@ -5,7 +5,7 @@
 		type FindUserError,
 		type FindUserSuccessResponseBody
 	} from '$lib/services/users/find-user';
-	import { cn } from '$lib/utils';
+	import { cn } from '$lib/utils/ui';
 	import { createInfiniteQuery, type InfiniteData, type QueryKey } from '@tanstack/svelte-query';
 	import AvatarUser from '../../shared/avatar-user.svelte';
 	import { Search } from 'lucide-svelte';

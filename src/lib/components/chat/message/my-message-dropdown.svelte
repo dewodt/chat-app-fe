@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import { cn } from '$lib/utils';
+	import { cn } from '$lib/utils/ui';
 	import { ChevronDown, SquarePen, Trash2 } from 'lucide-svelte';
 
 	// Props

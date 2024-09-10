@@ -4,7 +4,7 @@
 	import { securitySchema } from '$lib/schemas';
 	import { defaults, superForm } from 'sveltekit-superforms';
 	import { zod } from 'sveltekit-superforms/adapters';
-	import { cn } from '$lib/utils';
+	import { cn } from '$lib/utils/ui';
 	import {
 		updateSecurityService,
 		type UpdateSecurityError,

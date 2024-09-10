@@ -6,7 +6,7 @@
 	import MoreDropdown from './more/more-dropdown.svelte';
 	import { Separator } from '$lib/components/ui/separator';
 	import { writable } from 'svelte/store';
-	import { debounce } from '$lib/debounce';
+	import { debounce } from '$lib/utils/debounce';
 	import { Moon, Sun } from 'lucide-svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { toggleMode } from 'mode-watcher';

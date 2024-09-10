@@ -1,20 +1,20 @@
 <script lang="ts">
 	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
-	import { cn, getRelativeTime } from '$lib/utils';
+	import { cn } from '$lib/utils/ui';
 	import { createInfiniteQuery, type InfiniteData, type QueryKey } from '@tanstack/svelte-query';
-	import AvatarUser from '../../shared/avatar-user.svelte';
+	import AvatarUser from '$lib/components/shared/avatar-user.svelte';
 	import {
 		getChatInboxService,
 		type GetChatInboxError,
 		type GetChatInboxSuccessResponseBody
 	} from '$lib/services/chats/get-chat-inbox';
-	import LoadingFill from '../../shared/loading-fill.svelte';
-	import ErrorFill from '../../shared/error-fill.svelte';
+	import LoadingFill from '$lib/components/shared/loading-fill.svelte';
+	import ErrorFill from '$lib/components/shared/error-fill.svelte';
 	import IntersectionObserver from 'svelte-intersection-observer';
-	import { Scrollbar } from '../../ui/scroll-area';
 	import WarningFill from '$lib/components/shared/warning-fill.svelte';
 	import type { ChatInbox } from '$types';
 	import { selectedChatStore } from '$lib/stores';
+	import { getRelativeTime } from '$lib/utils/datetime';
 
 	// Props
 	export let debouncedSearch: string;

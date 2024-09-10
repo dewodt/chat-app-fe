@@ -1,4 +1,4 @@
-import { api } from '$lib/api';
+import { api } from '$lib/utils/api';
 import type { ChatInbox, ErrorResponseDto, SuccessPaginatedResponseDto } from '$types';
 import type { AxiosError } from 'axios';
 

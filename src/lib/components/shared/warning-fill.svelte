@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { cn } from '$lib/utils';
+	import { cn } from '$lib/utils/ui';
 	import { CircleAlert } from 'lucide-svelte';
 
 	let className = '';

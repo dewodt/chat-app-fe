@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getFormattedTime } from '$lib/utils';
+	import { getFormattedTime } from '$lib/utils/datetime';
 	import type { Message } from '$types';
 	import { Ban } from 'lucide-svelte';
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { CircleAlert, RotateCw } from 'lucide-svelte';
 	import Button from '../ui/button/button.svelte';
-	import { cn } from '$lib/utils';
+	import { cn } from '$lib/utils/ui';
 
 	let className = '';
 	export { className as class };

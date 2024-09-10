@@ -6,7 +6,7 @@
 	import { MessageSquarePlus } from 'lucide-svelte';
 	import UserList from './user-list.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
-	import { debounce } from '$lib/debounce';
+	import { debounce } from '$lib/utils/debounce';
 	import { writable } from 'svelte/store';
 	import { useQueryClient } from '@tanstack/svelte-query';
 

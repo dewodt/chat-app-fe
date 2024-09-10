@@ -4,7 +4,7 @@
 	import { superForm, defaults } from 'sveltekit-superforms';
 	import { zod } from 'sveltekit-superforms/adapters';
 	import { updateProfileSchema } from '$lib/schemas';
-	import { cn } from '$lib/utils';
+	import { cn } from '$lib/utils/ui';
 	import {
 		updateProfileDataService,
 		type UpdateProfileDataError,

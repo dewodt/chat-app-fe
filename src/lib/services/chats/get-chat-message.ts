@@ -1,4 +1,4 @@
-import { api } from '$lib/api';
+import { api } from '$lib/utils/api';
 import type { ErrorResponseDto, Message, SuccessPaginatedResponseDto } from '$types';
 import type { PaginateQuery } from '$types/request';
 import type { AxiosError } from 'axios';

@@ -8,7 +8,7 @@
 	import LoadingText from '$lib/components/shared/loading-text.svelte';
 	import { editMessageSchema } from '$lib/schemas/edit-message';
 	import type { Message } from '$types';
-	import { cn } from '$lib/utils';
+	import { cn } from '$lib/utils/ui';
 
 	// Props
 	let className = '';

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as Avatar from '$lib/components/ui/avatar/index.js';
-	import { cn } from '$lib/utils';
+	import { cn } from '$lib/utils/ui';
 	import { UserRound } from 'lucide-svelte';
 
 	// Props
