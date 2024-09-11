@@ -8,7 +8,11 @@
 
 	// Props
 	export let isEditOpen: boolean;
-	export let initialMessage: Message;
+	export let isPendingEdit: boolean;
+	export let initialMessage: Message & {
+		content: string;
+		deletedAt: null;
+	};
 
 	const isDesktop = mediaQuery('(min-width: 1024px)');
 </script>
@@ -24,7 +28,7 @@
 			</Dialog.Header>
 
 			<!-- Form -->
-			<EditMessageForm {initialMessage} bind:isEditOpen />
+			<EditMessageForm {initialMessage} bind:isEditOpen bind:isPendingEdit />
 		</Dialog.Content>
 	</Dialog.Root>
 {:else}
@@ -38,7 +42,7 @@
 			</Drawer.Header>
 
 			<!-- Form -->
-			<EditMessageForm class="px-4" {initialMessage} bind:isEditOpen />
+			<EditMessageForm class="px-4" {initialMessage} bind:isEditOpen bind:isPendingEdit />
 
 			<!-- Cancel -->
 			<Drawer.Footer class="pb-4 pt-2">

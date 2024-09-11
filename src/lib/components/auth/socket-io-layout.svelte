@@ -13,12 +13,12 @@
 	// Event listeners
 	// on connect
 	socket.on('connect', () => {
-		console.log('Connected to socket');
+		// console.log('Connected to socket');
 	});
 
 	// on disconnect
 	socket.on('disconnect', () => {
-		console.log('Disconnected from socket');
+		// console.log('Disconnected from socket');
 	});
 </script>
 

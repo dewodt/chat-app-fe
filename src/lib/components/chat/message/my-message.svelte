@@ -10,9 +10,10 @@
 	export let message: Message;
 
 	// State
-	let isDropdownOpen = false;
 	let isEditOpen = false;
 	let isDeleteOpen = false;
+	let isPendingEdit = false;
+	let isPendingDelete = false;
 </script>
 
 <div class="group relative ml-8 w-fit max-w-2xl rounded-lg bg-primary px-3 py-2">
@@ -44,16 +45,35 @@
 	</div>
 
 	<!-- Dropdown -->
-	<MyMessageDropdown
-		class="absolute -right-0.5 -top-0.5"
-		bind:isDropdownOpen
-		bind:isEditOpen
-		bind:isDeleteOpen
-	/>
+	{#if message.content !== null && message.deletedAt === null}
+		<MyMessageDropdown
+			class="absolute -right-0.5 -top-0.5"
+			bind:isEditOpen
+			bind:isDeleteOpen
+			{isPendingEdit}
+			{isPendingDelete}
+		/>
 
-	<!-- Edit Dialog -->
-	<EditMessagePopup bind:isEditOpen initialMessage={message} />
+		<!-- Edit Dialog -->
+		<EditMessagePopup
+			bind:isEditOpen
+			bind:isPendingEdit
+			initialMessage={{
+				...message,
+				content: message.content,
+				deletedAt: message.deletedAt
+			}}
+		/>
 
-	<!-- Delete configmation -->
-	<DeleteMessagePopup bind:isDeleteOpen initialMessage={message} />
+		<!-- Delete configmation -->
+		<DeleteMessagePopup
+			bind:isDeleteOpen
+			bind:isPendingDelete
+			initialMessage={{
+				...message,
+				content: message.content,
+				deletedAt: message.deletedAt
+			}}
+		/>
+	{/if}
 </div>

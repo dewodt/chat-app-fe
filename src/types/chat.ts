@@ -2,6 +2,7 @@ import type { ChatType } from '$lib/enums/chat';
 
 export interface Message {
 	messageId: string;
+	chatId: string;
 	content: string | null;
 	readAt: string | null;
 	editedAt: string | null;

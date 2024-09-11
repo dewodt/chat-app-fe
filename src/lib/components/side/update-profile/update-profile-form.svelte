@@ -53,8 +53,9 @@
 		UpdateProfileDataRequestBody
 	>({
 		mutationFn: async (body) => {
-			// await new Promise((resolve) => setTimeout(resolve, 5000));
+			// await new Promise((resolve) => setTimeout(resolve, 2500));
 			// throw new Error('Error');
+
 			const responseBody = await updateProfileDataService(body);
 			return responseBody;
 		},

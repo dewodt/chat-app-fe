@@ -6,9 +6,12 @@
 	// Props
 	let className = '';
 	export { className as class };
-	export let isDropdownOpen: boolean;
+	let isDropdownOpen: boolean;
 	export let isEditOpen: boolean;
 	export let isDeleteOpen: boolean;
+
+	export let isPendingEdit: boolean;
+	export let isPendingDelete: boolean;
 
 	const handleEdit = () => {
 		isDropdownOpen = false;
@@ -34,7 +37,7 @@
 
 	<DropdownMenu.Content sideOffset={-4} align="end" class="min-w-28">
 		<DropdownMenu.Group>
-			<DropdownMenu.Item on:click={handleEdit}>
+			<DropdownMenu.Item on:click={handleEdit} disabled={isPendingEdit || isPendingDelete}>
 				<SquarePen class="mr-2 size-4" />
 				<span>Edit</span>
 			</DropdownMenu.Item>
@@ -42,6 +45,7 @@
 			<DropdownMenu.Item
 				class="text-destructive data-[highlighted]:text-destructive"
 				on:click={handleDelete}
+				disabled={isPendingEdit || isPendingDelete}
 			>
 				<Trash2 class="mr-2 size-4" />
 				<span>Delete</span>
