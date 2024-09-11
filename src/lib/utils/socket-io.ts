@@ -1,29 +1,31 @@
-import { browser } from '$app/environment';
 import { PUBLIC_BE_URL } from '$env/static/public';
-import { io, Socket } from 'socket.io-client';
-import { writable } from 'svelte/store';
+import type { ErrorResponseDto, SuccessResponseDto } from '$types';
+import { io } from 'socket.io-client';
 
-export const socket = writable<Socket | null>(null);
+export const socket = io(PUBLIC_BE_URL, {
+	autoConnect: false,
+	withCredentials: true
+});
 
-if (browser) {
-	const socketInstance = io({
-		host: PUBLIC_BE_URL,
-		withCredentials: true
+export function emitWithAck<T extends SuccessResponseDto<any>>(
+	eventName: string,
+	data: any,
+	timeout = 15000
+): Promise<T> {
+	return new Promise((resolve, reject) => {
+		// Emit
+		socket.emit(eventName, data, (response: T | ErrorResponseDto) => {
+			if (response.result === 'error') {
+				// Error
+				reject(new Error(response.message));
+			} else {
+				// Success
+				resolve(response);
+			}
+		});
+
+		setTimeout(() => {
+			reject(new Error('Timeout exceeded'));
+		}, timeout);
 	});
-
-	socket.set(socketInstance);
 }
-
-export const disconnectSocket = () => {
-	socket.update((s) => {
-		if (s) s.disconnect();
-		return null;
-	});
-};
-
-export const connectSocket = () => {
-	socket.update((s) => {
-		if (s) s.connect();
-		return s;
-	});
-};

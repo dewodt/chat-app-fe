@@ -3,6 +3,7 @@ export interface BaseResponseDto {
 }
 
 export interface SuccessResponseDto<T> extends BaseResponseDto {
+	result: 'success';
 	data: T;
 }
 
@@ -23,5 +24,6 @@ export interface ErrorFieldDto {
 }
 
 export interface ErrorResponseDto extends BaseResponseDto {
+	result: 'error';
 	errorFields: ErrorFieldDto[] | undefined;
 }

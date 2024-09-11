@@ -1,4 +1,3 @@
-import type { ErrorResponseDto } from '$types';
 import { AxiosError } from 'axios';
 import { toast } from 'svelte-sonner';
 
@@ -21,12 +20,17 @@ export class ToastResponseFactory {
 		});
 	}
 
-	static createError(error: AxiosError<ErrorResponseDto>): void {
+	static createError(error: Error): void {
 		toast.dismiss();
 
 		if (error instanceof AxiosError && error.response) {
 			toast.error(`Error: ${error.response.statusText}`, {
 				description: error.response.data.message,
+				duration: 5000
+			});
+		} else if (error instanceof Error) {
+			toast.error('Error', {
+				description: error.message,
 				duration: 5000
 			});
 		} else {

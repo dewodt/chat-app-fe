@@ -17,7 +17,7 @@
 	import IntersectionObserver from 'svelte-intersection-observer';
 	import MyMessage from './message/my-message.svelte';
 	import OppositeMessage from './message/opposite-message.svelte';
-	import { afterUpdate, onMount } from 'svelte';
+	import { afterUpdate } from 'svelte';
 	import SendMessageForm from './send-message-form.svelte';
 
 	// Component rerender every time selectedChatStore changes
@@ -59,7 +59,7 @@
 			}
 		},
 		queryFn: async ({ pageParam }) => {
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			// await new Promise((resolve) => setTimeout(resolve, 1000));
 			// throw new Error('An error occurred while fetching chat messages');
 
 			// Get initial chat messages
@@ -94,22 +94,17 @@
 	// Flattened messages
 	$: allSortedMessages = $query.data?.pages.flatMap((page) => page.data).reverse() ?? [];
 
-	// Scroll to bottom everytime initial chat is open
-	$: {
-		if (isInitialChatOpen && scrollViewport && scrollContent && root) {
-			isInitialChatOpen = false;
-
-			// scroll viewport
+	const scrollToBottom = () => {
+		if (scrollViewport && scrollContent) {
 			scrollViewport.scrollTop = scrollViewport.scrollHeight - scrollViewport.clientHeight;
+		}
+	};
 
-			// // scroll thumb
-			// if (scrollThumb) {
-			// 	const initialThumbHeight =
-			// 		(scrollViewport.clientHeight * scrollViewport.clientHeight) / scrollContent.scrollHeight;
-			// 	const initialTranslateY = scrollViewport.clientHeight - initialThumbHeight;
-			// 	console.log(initialTranslateY);
-			// 	scrollThumb.style.transform = `translate3d(0px, ${initialTranslateY}px, 0px);`;
-			// }
+	// Scroll to bottom when initial chat open
+	$: {
+		if (isInitialChatOpen && scrollViewport && scrollContent) {
+			scrollToBottom();
+			isInitialChatOpen = false;
 		}
 	}
 
@@ -226,6 +221,6 @@
 		{/if}
 
 		<!-- Message Input -->
-		<SendMessageForm />
+		<SendMessageForm {scrollToBottom} />
 	</main>
 {/if}

@@ -15,6 +15,7 @@
 	import type { ChatInbox } from '$types';
 	import { selectedChatStore } from '$lib/stores';
 	import { getRelativeTime } from '$lib/utils/datetime';
+	import { joinChatRoomsService } from '$lib/services/chats/join-chatrooms';
 
 	// Props
 	export let debouncedSearch: string;
@@ -49,13 +50,15 @@
 			// throw new Error('An error occurred while fetching users');
 
 			// Get initial chat inbox
-			const responseBody = getChatInboxService({
+			const responseBody = await getChatInboxService({
 				title: debouncedSearch,
 				page: pageParam,
 				limit
 			});
 
-			// TODO: Connect to the chat room
+			// Join chat rooms
+			const chatIds = responseBody.data.map((chat) => chat.chatId);
+			await joinChatRoomsService({ chatIds });
 
 			return responseBody;
 		}
@@ -85,7 +88,7 @@
 {#if $query.isError}
 	<ErrorFill
 		statusText={$query.error.response?.statusText}
-		message={$query.error.response?.data.message}
+		message={$query.error.response?.data.message || $query.error.message}
 		refetch={$query.refetch}
 	/>
 {/if}

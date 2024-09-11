@@ -33,7 +33,17 @@ export default [
 					argsIgnorePattern: '^_',
 					varsIgnorePattern: '^\\$\\$(Props|Events|Slots|Generic)$'
 				}
-			]
+			],
+			// Add this rule to allow 'any'
+			'@typescript-eslint/no-explicit-any': 'off'
+		}
+	},
+	{
+		// Add a new configuration object for TypeScript files
+		files: ['**/*.ts', '**/*.tsx'],
+		rules: {
+			// Turn off the 'no-explicit-any' rule for TypeScript files
+			'@typescript-eslint/no-explicit-any': 'off'
 		}
 	},
 	{
