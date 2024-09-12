@@ -10,6 +10,7 @@
 	import type { Message } from '$types';
 	import { cn } from '$lib/utils/ui';
 	import {
+		editChatMessageQueryData,
 		editMessageService,
 		type EditMessageError,
 		type EditMessageRequestBody,
@@ -29,7 +30,6 @@
 	export let isPendingEdit: boolean;
 	$: {
 		isPendingEdit = $mutation.isPending;
-		console.log($mutation.isPending);
 	}
 
 	const form = superForm(
@@ -80,42 +80,8 @@
 		},
 		onSuccess: (response) => {
 			// Update message
-			queryClient.setQueryData<InfiniteData<GetChatMessageSuccessResponseBody>>(
-				['chat-message', initialMessage.chatId],
-				(oldData) => {
-					if (!oldData) return oldData;
-
-					// Find the message
-					const pageIdx = oldData.pages.findIndex((page) => {
-						return page.data.some((message) => message.messageId === initialMessage.messageId);
-					});
-					if (pageIdx === -1) return oldData;
-
-					// Update the message
-					const newMessage = response.data;
-					const newPage = {
-						...oldData.pages[pageIdx],
-						data: oldData.pages[pageIdx].data.map((message) => {
-							if (message.messageId === initialMessage.messageId) {
-								return newMessage;
-							}
-							return message;
-						})
-					};
-
-					// Update the data
-					const newPages = [
-						...oldData.pages.slice(0, pageIdx),
-						newPage,
-						...oldData.pages.slice(pageIdx + 1)
-					];
-
-					return {
-						pageParams: oldData.pageParams,
-						pages: newPages
-					};
-				}
-			);
+			const editedMessage = response.data;
+			editChatMessageQueryData(queryClient, editedMessage);
 
 			// Success toast
 			ToastResponseFactory.createSuccess(response.message);

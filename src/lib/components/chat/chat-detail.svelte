@@ -4,7 +4,7 @@
 	import { ChevronLeft } from 'lucide-svelte';
 	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
 	import { getGrouppedMessageKey } from '$lib/utils/datetime';
-	import { closeChat, selectedChatStore } from '$lib/stores';
+	import { closeChat, selectedChatStore, sessionStore } from '$lib/stores';
 	import { createInfiniteQuery, type InfiniteData, type QueryKey } from '@tanstack/svelte-query';
 	import {
 		type GetChatMessageSuccessResponseBody,
@@ -48,7 +48,7 @@
 	>({
 		initialPageParam: 1,
 		refetchOnWindowFocus: false,
-		enabled: !!selectedChatStore,
+		enabled: !!$selectedChatStore,
 		retry: 1,
 		queryKey: ['chat-message', $selectedChatStore?.chatId],
 		getNextPageParam: (lastPage) => {
@@ -203,7 +203,7 @@
 										{/if}
 									{/if}
 
-									{#if message.isCurrentUserSender}
+									{#if message.senderId == $sessionStore?.userId}
 										<li class="self-end">
 											<MyMessage {message} />
 										</li>

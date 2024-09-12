@@ -9,7 +9,7 @@
 		type SignOutSuccessResponseBody
 	} from '$lib/services/auth';
 	import { goto } from '$app/navigation';
-	import { sessionStore } from '$lib/stores';
+	import { selectedChatStore, sessionStore } from '$lib/stores';
 	import SecurityPopup from './security-popup.svelte';
 	import { ToastResponseFactory } from '$lib/components/ui/sonner';
 
@@ -38,6 +38,7 @@
 
 			// Reset store
 			$sessionStore = null;
+			$selectedChatStore = null;
 
 			// Delete all queries cache
 			queryClient.clear();

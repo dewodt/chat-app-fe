@@ -3,12 +3,12 @@ import type { ChatType } from '$lib/enums/chat';
 export interface Message {
 	messageId: string;
 	chatId: string;
+	senderId: string;
 	content: string | null;
 	readAt: string | null;
 	editedAt: string | null;
 	createdAt: string;
 	deletedAt: string | null;
-	isCurrentUserSender: boolean;
 }
 
 export interface Chat {
@@ -21,8 +21,9 @@ export interface Chat {
 export interface ChatInbox extends Chat {
 	unreadCount: number;
 	lastMessage: {
+		messageId: string;
 		content: string | null;
 		createdAt: string;
 		deletedAt: string | null;
-	};
+	} | null;
 }

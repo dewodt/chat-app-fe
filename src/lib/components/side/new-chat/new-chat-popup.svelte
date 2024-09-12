@@ -17,10 +17,10 @@
 	const debouncedSearch = debounce<string>(search, 300);
 
 	// Handle toggle
-	let open = false;
+	let isPopupOpen = false;
 	const queryClient = useQueryClient();
 	$: {
-		if (!open) {
+		if (!isPopupOpen) {
 			$search = '';
 			queryClient.removeQueries({
 				queryKey: ['find-users']
@@ -30,7 +30,7 @@
 </script>
 
 {#if $isDesktop}
-	<Dialog.Root bind:open>
+	<Dialog.Root bind:open={isPopupOpen}>
 		<!-- Trigger -->
 		<Dialog.Trigger asChild let:builder>
 			<Button
@@ -56,11 +56,11 @@
 			</Dialog.Header>
 
 			<!-- User List -->
-			<UserList debouncedSearch={$debouncedSearch} />
+			<UserList debouncedSearch={$debouncedSearch} bind:isPopupOpen />
 		</Dialog.Content>
 	</Dialog.Root>
 {:else}
-	<Drawer.Root bind:open>
+	<Drawer.Root bind:open={isPopupOpen}>
 		<!-- Trigger -->
 		<Drawer.Trigger asChild let:builder>
 			<Button
@@ -86,7 +86,7 @@
 			</Drawer.Header>
 
 			<!-- User List -->
-			<UserList debouncedSearch={$debouncedSearch} />
+			<UserList debouncedSearch={$debouncedSearch} bind:isPopupOpen />
 
 			<!-- Cancel -->
 			<Drawer.Footer class="border-t pb-4 pt-3">

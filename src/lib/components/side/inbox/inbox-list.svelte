@@ -58,7 +58,9 @@
 
 			// Join chat rooms
 			const chatIds = responseBody.data.map((chat) => chat.chatId);
-			await joinChatRoomsService({ chatIds });
+			if (chatIds.length > 0) {
+				await joinChatRoomsService({ chatIds });
+			}
 
 			return responseBody;
 		}
@@ -114,7 +116,7 @@
 									)}
 									on:click={() => handleSelectChat(chat)}
 								>
-									<div class="flex flex-row items-center gap-3">
+									<div class="flex flex-row items-center gap-4">
 										<!-- Avatar -->
 										<AvatarUser src={chat.avatarUrl} class="size-12" />
 
@@ -130,43 +132,47 @@
 											</h4>
 
 											<!-- Preview -->
-											<p
-												class={cn(
-													'line-clamp-1 text-start text-sm leading-tight',
-													isUnread
-														? 'font-semibold text-gray-600 dark:text-gray-300'
-														: 'font-medium text-muted-foreground'
-												)}
-											>
-												{chat.lastMessage.deletedAt
-													? 'This message was deleted'
-													: chat.lastMessage.content}
-											</p>
+											{#if chat.lastMessage}
+												<p
+													class={cn(
+														'line-clamp-1 text-start text-sm leading-tight',
+														isUnread
+															? 'font-semibold text-gray-600 dark:text-gray-300'
+															: 'font-medium text-muted-foreground'
+													)}
+												>
+													{chat.lastMessage.deletedAt
+														? 'This message was deleted'
+														: chat.lastMessage.content}
+												</p>
+											{/if}
 										</div>
 									</div>
 
-									<div class="flex flex-none flex-col items-end gap-1">
-										<!-- Time preview -->
-										<p
-											class={cn(
-												'text-xs',
-												isUnread ? 'font-bold text-primary' : 'font-medium text-muted-foreground'
-											)}
-										>
-											{getRelativeTime(new Date(chat.lastMessage.createdAt))}
-										</p>
-
-										<!-- Chat count -->
-										{#if isUnread}
-											<div
-												class="flex size-5 items-center justify-center rounded-full bg-primary text-xs font-medium text-primary-foreground"
+									{#if chat.lastMessage}
+										<div class="flex flex-none flex-col items-end gap-1">
+											<!-- Time preview -->
+											<p
+												class={cn(
+													'text-xs',
+													isUnread ? 'font-bold text-primary' : 'font-medium text-muted-foreground'
+												)}
 											>
-												{chat.unreadCount}
-											</div>
-										{:else}
-											<div class="size-5"></div>
-										{/if}
-									</div>
+												{getRelativeTime(new Date(chat.lastMessage.createdAt))}
+											</p>
+
+											<!-- Chat count -->
+											{#if isUnread}
+												<div
+													class="flex size-5 items-center justify-center rounded-full bg-primary text-xs font-medium text-primary-foreground"
+												>
+													{chat.unreadCount}
+												</div>
+											{:else}
+												<div class="invisible size-5"></div>
+											{/if}
+										</div>
+									{/if}
 								</button>
 							</li>
 						{/each}

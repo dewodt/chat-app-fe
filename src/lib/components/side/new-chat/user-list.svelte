@@ -6,15 +6,28 @@
 		type FindUserSuccessResponseBody
 	} from '$lib/services/users/find-user';
 	import { cn } from '$lib/utils/ui';
-	import { createInfiniteQuery, type InfiniteData, type QueryKey } from '@tanstack/svelte-query';
+	import {
+		createInfiniteQuery,
+		createMutation,
+		type InfiniteData,
+		type QueryKey
+	} from '@tanstack/svelte-query';
 	import AvatarUser from '../../shared/avatar-user.svelte';
 	import { Search } from 'lucide-svelte';
 	import LoadingFill from '$lib/components/shared/loading-fill.svelte';
 	import ErrorFill from '$lib/components/shared/error-fill.svelte';
 	import IntersectionObserver from 'svelte-intersection-observer';
 	import WarningFill from '$lib/components/shared/warning-fill.svelte';
+	import {
+		newChatService,
+		type NewChatError,
+		type NewChatSuccessResponseBody
+	} from '$lib/services/chats/new-chat';
+	import { ToastResponseFactory } from '$lib/components/ui/sonner';
+	import { openChat } from '$lib/stores';
 
 	export let debouncedSearch: string;
+	export let isPopupOpen: boolean;
 
 	// Intersection observer
 	let element: HTMLElement;
@@ -63,6 +76,34 @@
 			$query.fetchNextPage();
 		}
 	}
+
+	// Mutation (create or get existing chat)
+	const mutation = createMutation<NewChatSuccessResponseBody, NewChatError, string>({
+		mutationFn: async (userId: string) => {
+			// await new Promise((resolve) => setTimeout(resolve, 3000));
+			// throw new Error('An error occurred while creating chat');
+
+			const responseBody = await newChatService(userId);
+			return responseBody;
+		},
+		onMutate: () => {
+			// Loading toast
+			ToastResponseFactory.createLoading('Please wait while we create a new chat.');
+		},
+		onSuccess: (response) => {
+			// Success toast
+			ToastResponseFactory.createSuccess(response.message);
+
+			const newChat = response.data;
+			openChat(newChat);
+
+			isPopupOpen = false;
+		},
+		onError: (error) => {
+			// Error toast
+			ToastResponseFactory.createError(error);
+		}
+	});
 </script>
 
 {#if !debouncedSearch}
@@ -101,6 +142,8 @@
 											'flex flex-auto flex-row items-center gap-3 px-4 py-3 transition-all hover:bg-muted lg:px-6',
 											index === allUsers.length - 1 ? 'border-none' : 'border-b'
 										)}
+										on:click={() => $mutation.mutate(user.id)}
+										disabled={$mutation.isPending}
 									>
 										<!-- Avatar -->
 										<AvatarUser class="size-12" />

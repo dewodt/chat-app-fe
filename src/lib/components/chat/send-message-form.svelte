@@ -7,7 +7,7 @@
 	import { SendHorizontal } from 'lucide-svelte';
 	import {
 		sendMessageService,
-		type GetChatMessageSuccessResponseBody,
+		updateSendMessageQueryData,
 		type SendMessageError,
 		type SendMessageRequestBody,
 		type SendMessageSuccessResponseBody
@@ -52,26 +52,9 @@
 		},
 		onSuccess: (response) => {
 			// Update messages
-			const chatId = $selectedChatStore!.chatId;
-			const newMessage = response.data;
-			queryClient.setQueryData<InfiniteData<GetChatMessageSuccessResponseBody>>(
-				['chat-message', chatId],
-				(oldData) => {
-					if (!oldData) return oldData;
-
-					const firstPage = oldData.pages[0];
-					const newPage = {
-						...firstPage,
-						data: [newMessage, ...firstPage.data]
-					};
-					const otherPage = oldData.pages.slice(1);
-
-					return {
-						pageParams: oldData.pageParams,
-						pages: [newPage, ...otherPage]
-					};
-				}
-			);
+			const newChatInbox = response.data.chatInbox;
+			const newMessage = response.data.message;
+			updateSendMessageQueryData(queryClient, newChatInbox, newMessage);
 		},
 		onError: (error) => {
 			// Error toast

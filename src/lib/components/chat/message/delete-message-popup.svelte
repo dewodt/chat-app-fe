@@ -2,6 +2,7 @@
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import { ToastResponseFactory } from '$lib/components/ui/sonner';
 	import {
+		deleteChatMessageQueryData,
 		deleteMessageService,
 		type DeleteMessageError,
 		type DeleteMessageRequestBody,
@@ -43,44 +44,9 @@
 			isDeleteOpen = false;
 		},
 		onSuccess: (response) => {
-			// Update message data
 			// Update message
-			queryClient.setQueryData<InfiniteData<GetChatMessageSuccessResponseBody>>(
-				['chat-message', initialMessage.chatId],
-				(oldData) => {
-					if (!oldData) return oldData;
-
-					// Find the message
-					const pageIdx = oldData.pages.findIndex((page) => {
-						return page.data.some((message) => message.messageId === initialMessage.messageId);
-					});
-					if (pageIdx === -1) return oldData;
-
-					// Update the message
-					const deletedMessage = response.data;
-					const newPage = {
-						...oldData.pages[pageIdx],
-						data: oldData.pages[pageIdx].data.map((message) => {
-							if (message.messageId === initialMessage.messageId) {
-								return deletedMessage;
-							}
-							return message;
-						})
-					};
-
-					// Update the data
-					const newPages = [
-						...oldData.pages.slice(0, pageIdx),
-						newPage,
-						...oldData.pages.slice(pageIdx + 1)
-					];
-
-					return {
-						pageParams: oldData.pageParams,
-						pages: newPages
-					};
-				}
-			);
+			const deletedMessage = response.data;
+			deleteChatMessageQueryData(queryClient, deletedMessage);
 
 			// Success toast
 			ToastResponseFactory.createSuccess(response.message);

@@ -29,3 +29,7 @@ export function emitWithAck<T extends SuccessResponseDto<any>>(
 		}, timeout);
 	});
 }
+
+export function listenEvent<T>(eventName: string, callback: (data: T) => void) {
+	socket.on(eventName, callback);
+}

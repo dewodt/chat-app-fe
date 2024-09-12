@@ -29,7 +29,7 @@
 	<div
 		class="flex flex-row items-center justify-end text-xs font-medium text-primary-foreground/60"
 	>
-		{#if message.editedAt}
+		{#if message.editedAt && message.deletedAt === null}
 			<p class="mr-2">Edited</p>
 		{/if}
 
