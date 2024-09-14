@@ -27,11 +27,11 @@ export async function editMessageService(
 	return response;
 }
 
-export function editChatMessageQueryData(
+// Update inbox if message is appeared in inbox
+export function updateEditMessageQueryDataInbox(
 	queryClient: QueryClient,
 	responseData: EditMessageSuccessResponseData
 ) {
-	// Update inbox if message is appeared in inbox
 	queryClient.setQueriesData<InfiniteData<GetChatInboxSuccessResponseBody>>(
 		{
 			queryKey: ['chat-inbox']
@@ -44,8 +44,8 @@ export function editChatMessageQueryData(
 				page.data.some(
 					(inbox) =>
 						inbox.chatId == responseData.chatId &&
-						inbox.lastMessage &&
-						inbox.lastMessage.messageId == responseData.messageId
+						inbox.latestMessage &&
+						inbox.latestMessage.messageId == responseData.messageId
 				)
 			);
 			if (pageIdx == -1) return oldData;
@@ -56,13 +56,13 @@ export function editChatMessageQueryData(
 				data: oldData.pages[pageIdx].data.map((inbox) => {
 					if (
 						inbox.chatId == responseData.chatId &&
-						inbox.lastMessage &&
-						inbox.lastMessage.messageId == responseData.messageId
+						inbox.latestMessage &&
+						inbox.latestMessage.messageId == responseData.messageId
 					) {
 						return {
 							...inbox,
-							lastMessage: {
-								...inbox.lastMessage,
+							latestMessage: {
+								...inbox.latestMessage,
 								content: responseData.newMessage
 							}
 						};
@@ -85,7 +85,13 @@ export function editChatMessageQueryData(
 			};
 		}
 	);
+}
 
+// Update messages
+export function updateEditMessageQueryDataMessage(
+	queryClient: QueryClient,
+	responseData: EditMessageSuccessResponseData
+) {
 	// Update messages
 	queryClient.setQueryData<InfiniteData<GetChatMessageSuccessResponseBody>>(
 		['chat-message', responseData.chatId],

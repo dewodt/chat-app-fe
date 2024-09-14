@@ -10,12 +10,12 @@
 	import type { Message } from '$types';
 	import { cn } from '$lib/utils/ui';
 	import {
-		editChatMessageQueryData,
+		updateEditMessageQueryDataInbox,
+		updateEditMessageQueryDataMessage,
 		editMessageService,
 		type EditMessageError,
 		type EditMessageRequestBody,
-		type EditMessageSuccessResponseBody,
-		type GetChatMessageSuccessResponseBody
+		type EditMessageSuccessResponseBody
 	} from '$lib/services/chats';
 
 	// Props
@@ -79,9 +79,11 @@
 			ToastResponseFactory.createLoading('Please wait while we edit your message.');
 		},
 		onSuccess: (response) => {
+			// Update inbox
+			updateEditMessageQueryDataInbox(queryClient, response.data);
+
 			// Update message
-			const editedMessage = response.data;
-			editChatMessageQueryData(queryClient, editedMessage);
+			updateEditMessageQueryDataMessage(queryClient, response.data);
 
 			// Success toast
 			ToastResponseFactory.createSuccess(response.message);

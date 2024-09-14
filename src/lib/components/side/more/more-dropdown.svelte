@@ -25,7 +25,7 @@
 			const responseBody = await signOutService();
 			return responseBody;
 		},
-		onMutate(variables) {
+		onMutate() {
 			// Loading toast
 			ToastResponseFactory.createLoading('Please wait while we sign you out.');
 		},
@@ -33,15 +33,8 @@
 			// Success Toast
 			ToastResponseFactory.createSuccess(response.message);
 
-			// Redirect to sign in page
-			goto('/auth/sign-in');
-
-			// Reset store
-			$sessionStore = null;
-			$selectedChatStore = null;
-
-			// Delete all queries cache
-			queryClient.clear();
+			// Redirect to sign in page (hard refresh)
+			window.location.href = '/auth/sign-in';
 		},
 		onError: (error) => {
 			// Error toast

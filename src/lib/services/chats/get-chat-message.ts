@@ -1,11 +1,15 @@
 import { api } from '$lib/utils/api';
-import type { ErrorResponseDto, Message, SuccessPaginatedResponseDto } from '$types';
-import type { PaginateQuery } from '$types/request';
+import type {
+	CursorPaginationRequestQuery,
+	ErrorResponseDto,
+	Message,
+	SuccessCursorPaginationResponseDto
+} from '$types';
 import type { AxiosError } from 'axios';
 
-export type GetChatMessageRequestQuery = PaginateQuery;
+export type GetChatMessageRequestQuery = CursorPaginationRequestQuery;
 
-export type GetChatMessageSuccessResponseBody = SuccessPaginatedResponseDto<Message>;
+export type GetChatMessageSuccessResponseBody = SuccessCursorPaginationResponseDto<Message>;
 
 export type GetChatMessageError = AxiosError<ErrorResponseDto>;
 

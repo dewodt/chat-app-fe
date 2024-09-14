@@ -7,48 +7,87 @@
 	import { mediaQuery } from 'svelte-legos';
 	import { listenEvent } from '$lib/utils/socket-io';
 	import {
-		deleteChatMessageQueryData,
-		editChatMessageQueryData,
-		updateSendMessageQueryData,
+		readChatService,
+		updateDeleteMessageQueryDataInbox,
+		updateDeleteMessageQueryDataMessage,
+		updateEditMessageQueryDataInbox,
+		updateEditMessageQueryDataMessage,
+		updateReadChatQueryDataInbox,
+		updateReadChatQueryDataMessage,
+		updateSendMessageQueryDataInbox,
+		updateSendMessageQueryDataMessage,
 		type DeleteMessageSuccessResponseBody,
 		type EditMessageSuccessResponseBody,
+		type ReadChatError,
+		type ReadChatRequestBody,
+		type ReadChatSuccessResponseBody,
 		type SendMessageSuccessResponseBody
 	} from '$lib/services/chats';
-	import { useQueryClient } from '@tanstack/svelte-query';
+	import { createMutation, useQueryClient } from '@tanstack/svelte-query';
+	import { ToastResponseFactory } from '$lib/components/ui/sonner';
 
 	const isDesktop = mediaQuery('(min-width: 1024px)');
 
+	// Read chat mutation
 	const queryClient = useQueryClient();
+	const mutation = createMutation<ReadChatSuccessResponseBody, ReadChatError, ReadChatRequestBody>({
+		mutationFn: async (body) => {
+			// await new Promise((resolve) => setTimeout(resolve, 2000));
+			// throw new Error('An error occurred while reading chat');
 
-	// Listen to new message
+			const responseBody = await readChatService(body);
+			return responseBody;
+		},
+		onError: (error) => {
+			// Error toast
+			ToastResponseFactory.createError(error);
+		},
+		onSuccess: (response) => {
+			// Inbox query data
+			updateReadChatQueryDataInbox(queryClient, response.data);
+
+			// Messages query data
+			updateReadChatQueryDataMessage(queryClient, response.data);
+		}
+	});
+
+	// Listen to new message from other user
 	listenEvent<SendMessageSuccessResponseBody>('newMessage', (response) => {
-		// Update chat message query data
-		const newMessage = response.data.message;
-		const newInbox = response.data.chatInbox;
-		updateSendMessageQueryData(queryClient, newInbox, newMessage);
-
 		// Update inbox query data
+		updateSendMessageQueryDataInbox(queryClient, response.data);
+
+		// Update chat message query data
+		updateSendMessageQueryDataMessage(queryClient, response.data);
+
+		// Update read receipt if chat is currently open
+		if ($selectedChatStore && $selectedChatStore.chatId === response.data.chatInbox.chatId) {
+			$mutation.mutate({ chatId: response.data.chatInbox.chatId });
+		}
 	});
 
-	// Listen to edited message
+	// Listen to edited message from other user
 	listenEvent<EditMessageSuccessResponseBody>('newEditMessage', (response) => {
-		// Update chat message query data
-		const editedMessage = response.data;
-		editChatMessageQueryData(queryClient, editedMessage);
-
 		// Update inbox query data
+		updateEditMessageQueryDataInbox(queryClient, response.data);
+
+		// Update chat message query data
+		updateEditMessageQueryDataMessage(queryClient, response.data);
 	});
 
-	// Listen to deleted message
+	// Listen to deleted message from other user
 	listenEvent<DeleteMessageSuccessResponseBody>('newDeleteMessage', (response) => {
-		// Update chat message query data
-		const deletedMessage = response.data;
-		deleteChatMessageQueryData(queryClient, deletedMessage);
-
 		// Update inbox query data
+		updateDeleteMessageQueryDataInbox(queryClient, response.data);
+
+		// Update chat message query data
+		updateDeleteMessageQueryDataMessage(queryClient, response.data);
 	});
 
-	// Listen to read chats
+	// Listen to read chats from other user
+	listenEvent<ReadChatSuccessResponseBody>('newReadChat', (response) => {
+		// Update chat message only (inbox is not updated)
+		updateReadChatQueryDataMessage(queryClient, response.data);
+	});
 </script>
 
 <HeadTemplate

@@ -42,16 +42,17 @@
 		FindUserError,
 		InfiniteData<FindUserSuccessResponseBody>,
 		QueryKey,
-		number
+		string | undefined
 	>({
 		queryKey: ['find-users', debouncedSearch],
-		initialPageParam: 1,
 		retry: 1,
 		enabled: !!debouncedSearch,
 		refetchOnWindowFocus: false,
+		refetchOnMount: false,
+		initialPageParam: undefined,
 		getNextPageParam: (lastPage) => {
-			if (lastPage.meta.page < lastPage.meta.totalPage) {
-				return lastPage.meta.page + 1;
+			if (lastPage.meta.nextCursor) {
+				return lastPage.meta.nextCursor;
 			} else {
 				return undefined;
 			}
@@ -61,7 +62,7 @@
 			// throw new Error('An error occurred while fetching users');
 			const responseBody = findUserService({
 				username: debouncedSearch,
-				page: pageParam,
+				cursor: pageParam,
 				limit
 			});
 			return responseBody;

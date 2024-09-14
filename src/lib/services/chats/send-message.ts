@@ -9,10 +9,12 @@ export interface SendMessageRequestBody {
 	message: string;
 }
 
-export type SendMessageSuccessResponseBody = SuccessResponseDto<{
+export interface SendMessageSuccessResponseData {
 	chatInbox: ChatInbox;
 	message: Message;
-}>;
+}
+
+export type SendMessageSuccessResponseBody = SuccessResponseDto<SendMessageSuccessResponseData>;
 
 export type SendMessageError = Error;
 
@@ -23,12 +25,11 @@ export async function sendMessageService(
 	return response;
 }
 
-export function updateSendMessageQueryData(
+// Update chat inbox
+export function updateSendMessageQueryDataInbox(
 	queryClient: QueryClient,
-	newChatInbox: ChatInbox,
-	newMessage: Message
+	responseData: SendMessageSuccessResponseData
 ) {
-	// Update chat inbox
 	queryClient.setQueriesData<InfiniteData<GetChatInboxSuccessResponseBody>>(
 		{
 			queryKey: ['chat-inbox']
@@ -38,7 +39,7 @@ export function updateSendMessageQueryData(
 
 			// Find if the inbox is in the list
 			const pageIdx = oldData.pages.findIndex((page) =>
-				page.data.some((inbox) => inbox.chatId === newChatInbox.chatId)
+				page.data.some((inbox) => inbox.chatId === responseData.chatInbox.chatId)
 			);
 
 			if (pageIdx === -1) {
@@ -46,7 +47,7 @@ export function updateSendMessageQueryData(
 				const firstPage = oldData.pages[0];
 				const newFirstPage: GetChatInboxSuccessResponseBody = {
 					...firstPage,
-					data: [newChatInbox, ...firstPage.data]
+					data: [responseData.chatInbox, ...firstPage.data]
 				};
 				const newPages = [newFirstPage, ...oldData.pages.slice(1)];
 
@@ -59,14 +60,14 @@ export function updateSendMessageQueryData(
 				const foundPage = oldData.pages[pageIdx];
 				const updatedFoundPage: GetChatInboxSuccessResponseBody = {
 					...foundPage,
-					data: foundPage.data.filter((inbox) => inbox.chatId !== newChatInbox.chatId)
+					data: foundPage.data.filter((inbox) => inbox.chatId !== responseData.chatInbox.chatId)
 				};
 				const firstPage = oldData.pages[0];
 				const newFirstPage: GetChatInboxSuccessResponseBody = {
 					...firstPage,
 					data: [
-						newChatInbox,
-						...firstPage.data.filter((inbox) => inbox.chatId !== newChatInbox.chatId)
+						responseData.chatInbox,
+						...firstPage.data.filter((inbox) => inbox.chatId !== responseData.chatInbox.chatId)
 					]
 				};
 
@@ -93,10 +94,15 @@ export function updateSendMessageQueryData(
 			}
 		}
 	);
+}
 
-	// Update messages
+// Update messages
+export function updateSendMessageQueryDataMessage(
+	queryClient: QueryClient,
+	responseData: SendMessageSuccessResponseData
+) {
 	queryClient.setQueryData<InfiniteData<GetChatMessageSuccessResponseBody>>(
-		['chat-message', newMessage.chatId],
+		['chat-message', responseData.message.chatId],
 		(oldData) => {
 			if (!oldData) return oldData;
 
@@ -104,7 +110,7 @@ export function updateSendMessageQueryData(
 			const firstPage = oldData.pages[0];
 			const newPage = {
 				...firstPage,
-				data: [newMessage, ...firstPage.data]
+				data: [responseData.message, ...firstPage.data]
 			};
 			const updatedPage = [newPage, ...oldData.pages.slice(1)];
 

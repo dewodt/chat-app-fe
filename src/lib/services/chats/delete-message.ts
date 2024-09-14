@@ -25,11 +25,11 @@ export async function deleteMessageService(
 	return response;
 }
 
-export function deleteChatMessageQueryData(
+// Update inbox if message is appeared in inbox
+export function updateDeleteMessageQueryDataInbox(
 	queryClient: QueryClient,
 	responseData: DeleteMessageSuccessResponseData
 ) {
-	// Update inbox if message is appeared in inbox
 	queryClient.setQueriesData<InfiniteData<GetChatInboxSuccessResponseBody>>(
 		{
 			queryKey: ['chat-inbox']
@@ -42,8 +42,8 @@ export function deleteChatMessageQueryData(
 				page.data.some(
 					(inbox) =>
 						inbox.chatId == responseData.chatId &&
-						inbox.lastMessage &&
-						inbox.lastMessage.messageId == responseData.messageId
+						inbox.latestMessage &&
+						inbox.latestMessage.messageId == responseData.messageId
 				)
 			);
 			if (pageIdx == -1) return oldData;
@@ -54,13 +54,13 @@ export function deleteChatMessageQueryData(
 				data: oldData.pages[pageIdx].data.map((inbox) => {
 					if (
 						inbox.chatId == responseData.chatId &&
-						inbox.lastMessage &&
-						inbox.lastMessage.messageId == responseData.messageId
+						inbox.latestMessage &&
+						inbox.latestMessage.messageId == responseData.messageId
 					) {
 						return {
 							...inbox,
-							lastMessage: {
-								...inbox.lastMessage,
+							latestMessage: {
+								...inbox.latestMessage,
 								content: null,
 								deletedAt: responseData.deletedAt
 							}
@@ -84,8 +84,13 @@ export function deleteChatMessageQueryData(
 			};
 		}
 	);
+}
 
-	// Update messages
+// Update messages
+export function updateDeleteMessageQueryDataMessage(
+	queryClient: QueryClient,
+	responseData: DeleteMessageSuccessResponseData
+) {
 	queryClient.setQueryData<InfiniteData<GetChatMessageSuccessResponseBody>>(
 		['chat-message', responseData.chatId],
 		(oldData) => {

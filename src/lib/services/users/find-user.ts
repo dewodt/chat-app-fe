@@ -1,14 +1,17 @@
 import { api } from '$lib/utils/api';
-import type { ErrorResponseDto, SuccessPaginatedResponseDto, User } from '$types';
+import type {
+	CursorPaginationRequestQuery,
+	ErrorResponseDto,
+	SuccessCursorPaginationResponseDto,
+	User
+} from '$types';
 import type { AxiosError } from 'axios';
 
-export interface FindUserRequestQuery {
+export interface FindUserRequestQuery extends CursorPaginationRequestQuery {
 	username: string;
-	page: number;
-	limit: number;
 }
 
-export type FindUserSuccessResponseBody = SuccessPaginatedResponseDto<User>;
+export type FindUserSuccessResponseBody = SuccessCursorPaginationResponseDto<User>;
 
 export type FindUserError = AxiosError<ErrorResponseDto>;
 

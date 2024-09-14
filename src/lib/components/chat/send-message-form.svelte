@@ -7,7 +7,8 @@
 	import { SendHorizontal } from 'lucide-svelte';
 	import {
 		sendMessageService,
-		updateSendMessageQueryData,
+		updateSendMessageQueryDataInbox,
+		updateSendMessageQueryDataMessage,
 		type SendMessageError,
 		type SendMessageRequestBody,
 		type SendMessageSuccessResponseBody
@@ -15,8 +16,11 @@
 	import { selectedChatStore } from '$lib/stores';
 	import { createMutation, useQueryClient, type InfiniteData } from '@tanstack/svelte-query';
 	import { ToastResponseFactory } from '../ui/sonner';
+	import { onMount } from 'svelte';
 
 	export let scrollToBottom: () => void;
+
+	let inputRef: HTMLInputElement | undefined;
 
 	const form = superForm(defaults(zod(sendMessageSchema)), {
 		SPA: true,
@@ -31,6 +35,10 @@
 			const { message } = $formData;
 
 			$mutation.mutate({ chatId, message });
+		},
+		onUpdated: () => {
+			// After submit, still focus on input
+			inputRef?.focus();
 		}
 	});
 
@@ -51,10 +59,14 @@
 			return responseBody;
 		},
 		onSuccess: (response) => {
-			// Update messages
-			const newChatInbox = response.data.chatInbox;
-			const newMessage = response.data.message;
-			updateSendMessageQueryData(queryClient, newChatInbox, newMessage);
+			// Update inbox query data
+			updateSendMessageQueryDataInbox(queryClient, response.data);
+
+			// Update chat message query data
+			updateSendMessageQueryDataMessage(queryClient, response.data);
+
+			// Scroll bottom
+			scrollToBottom();
 		},
 		onError: (error) => {
 			// Error toast
@@ -68,6 +80,11 @@
 			scrollToBottom();
 		}
 	}
+
+	// On mount, focus on input
+	onMount(() => {
+		inputRef?.focus();
+	});
 </script>
 
 <form use:enhance class="flex flex-row gap-3.5 border-t bg-muted px-4 py-3.5">
@@ -79,6 +96,7 @@
 				class="focus-visible:ring-0 focus-visible:ring-offset-0"
 				autocomplete="off"
 				bind:value={$formData.message}
+				bind:ref={inputRef}
 				{...attrs}
 			/>
 		</Form.Control>

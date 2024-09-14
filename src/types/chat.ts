@@ -20,7 +20,7 @@ export interface Chat {
 
 export interface ChatInbox extends Chat {
 	unreadCount: number;
-	lastMessage: {
+	latestMessage: {
 		messageId: string;
 		content: string | null;
 		createdAt: string;

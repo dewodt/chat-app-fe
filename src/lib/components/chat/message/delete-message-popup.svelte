@@ -2,12 +2,12 @@
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import { ToastResponseFactory } from '$lib/components/ui/sonner';
 	import {
-		deleteChatMessageQueryData,
+		updateDeleteMessageQueryDataInbox,
+		updateDeleteMessageQueryDataMessage,
 		deleteMessageService,
 		type DeleteMessageError,
 		type DeleteMessageRequestBody,
-		type DeleteMessageSuccessResponseBody,
-		type GetChatMessageSuccessResponseBody
+		type DeleteMessageSuccessResponseBody
 	} from '$lib/services/chats';
 	import type { Message } from '$types';
 	import { createMutation, useQueryClient, type InfiniteData } from '@tanstack/svelte-query';
@@ -44,9 +44,11 @@
 			isDeleteOpen = false;
 		},
 		onSuccess: (response) => {
-			// Update message
-			const deletedMessage = response.data;
-			deleteChatMessageQueryData(queryClient, deletedMessage);
+			// Update inbox query data
+			updateDeleteMessageQueryDataInbox(queryClient, response.data);
+
+			// Update chat message query data
+			updateDeleteMessageQueryDataMessage(queryClient, response.data);
 
 			// Success toast
 			ToastResponseFactory.createSuccess(response.message);

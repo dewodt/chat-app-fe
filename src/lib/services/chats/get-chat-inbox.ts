@@ -1,14 +1,17 @@
 import { api } from '$lib/utils/api';
-import type { ChatInbox, ErrorResponseDto, SuccessPaginatedResponseDto } from '$types';
+import type {
+	ChatInbox,
+	CursorPaginationRequestQuery,
+	ErrorResponseDto,
+	SuccessCursorPaginationResponseDto
+} from '$types';
 import type { AxiosError } from 'axios';
 
-export interface GetChatInboxRequestQuery {
+export interface GetChatInboxRequestQuery extends CursorPaginationRequestQuery {
 	title: string;
-	page: number;
-	limit: number;
 }
 
-export type GetChatInboxSuccessResponseBody = SuccessPaginatedResponseDto<ChatInbox>;
+export type GetChatInboxSuccessResponseBody = SuccessCursorPaginationResponseDto<ChatInbox>;
 
 export type GetChatInboxError = AxiosError<ErrorResponseDto>;
 

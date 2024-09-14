@@ -1,7 +1,13 @@
 <script lang="ts">
 	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
 	import { cn } from '$lib/utils/ui';
-	import { createInfiniteQuery, type InfiniteData, type QueryKey } from '@tanstack/svelte-query';
+	import {
+		createInfiniteQuery,
+		createMutation,
+		useQueryClient,
+		type InfiniteData,
+		type QueryKey
+	} from '@tanstack/svelte-query';
 	import AvatarUser from '$lib/components/shared/avatar-user.svelte';
 	import {
 		getChatInboxService,
@@ -16,6 +22,13 @@
 	import { selectedChatStore } from '$lib/stores';
 	import { getRelativeTime } from '$lib/utils/datetime';
 	import { joinChatRoomsService } from '$lib/services/chats/join-chatrooms';
+	import {
+		readChatService,
+		type ReadChatError,
+		type ReadChatRequestBody,
+		type ReadChatSuccessResponseBody
+	} from '$lib/services/chats';
+	import { ToastResponseFactory } from '$lib/components/ui/sonner';
 
 	// Props
 	export let debouncedSearch: string;
@@ -32,15 +45,15 @@
 		GetChatInboxError,
 		InfiniteData<GetChatInboxSuccessResponseBody>,
 		QueryKey,
-		number
+		string | undefined
 	>({
 		queryKey: ['chat-inbox', debouncedSearch],
-		initialPageParam: 1,
 		retry: 1,
 		refetchOnWindowFocus: false,
+		initialPageParam: undefined,
 		getNextPageParam: (lastPage) => {
-			if (lastPage.meta.page < lastPage.meta.totalPage) {
-				return lastPage.meta.page + 1;
+			if (lastPage.meta.nextCursor) {
+				return lastPage.meta.nextCursor;
 			} else {
 				return undefined;
 			}
@@ -52,7 +65,7 @@
 			// Get initial chat inbox
 			const responseBody = await getChatInboxService({
 				title: debouncedSearch,
-				page: pageParam,
+				cursor: pageParam,
 				limit
 			});
 
@@ -79,6 +92,8 @@
 		if ($selectedChatStore && $selectedChatStore.chatId === chat.chatId) {
 			return;
 		}
+
+		// Update selected chat state
 		selectedChatStore.set(chat);
 	};
 </script>
@@ -125,14 +140,14 @@
 											<h4
 												class={cn(
 													'line-clamp-1 text-start text-base leading-tight',
-													isUnread ? 'font-semibold' : 'font-medium'
+													isUnread ? 'font-bold' : 'font-medium'
 												)}
 											>
 												{chat.title}
 											</h4>
 
 											<!-- Preview -->
-											{#if chat.lastMessage}
+											{#if chat.latestMessage}
 												<p
 													class={cn(
 														'line-clamp-1 text-start text-sm leading-tight',
@@ -141,15 +156,15 @@
 															: 'font-medium text-muted-foreground'
 													)}
 												>
-													{chat.lastMessage.deletedAt
+													{chat.latestMessage.deletedAt
 														? 'This message was deleted'
-														: chat.lastMessage.content}
+														: chat.latestMessage.content}
 												</p>
 											{/if}
 										</div>
 									</div>
 
-									{#if chat.lastMessage}
+									{#if chat.latestMessage}
 										<div class="flex flex-none flex-col items-end gap-1">
 											<!-- Time preview -->
 											<p
@@ -158,7 +173,7 @@
 													isUnread ? 'font-bold text-primary' : 'font-medium text-muted-foreground'
 												)}
 											>
-												{getRelativeTime(new Date(chat.lastMessage.createdAt))}
+												{getRelativeTime(new Date(chat.latestMessage.createdAt))}
 											</p>
 
 											<!-- Chat count -->
@@ -166,7 +181,7 @@
 												<div
 													class="flex size-5 items-center justify-center rounded-full bg-primary text-xs font-medium text-primary-foreground"
 												>
-													{chat.unreadCount}
+													{chat.unreadCount > 9 ? '9+' : chat.unreadCount}
 												</div>
 											{:else}
 												<div class="invisible size-5"></div>
