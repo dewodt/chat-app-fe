@@ -30,9 +30,24 @@ export function updateSendMessageQueryDataInbox(
 	queryClient: QueryClient,
 	responseData: SendMessageSuccessResponseData
 ) {
+	// Update all chat inbox queries if no filter
+	// Otherwise, update only the chat inbox queries that match the filter (ILIKE % filter %)
 	queryClient.setQueriesData<InfiniteData<GetChatInboxSuccessResponseBody>>(
 		{
-			queryKey: ['chat-inbox']
+			predicate: (query) => {
+				const isChatInbox = query.queryKey[0] === 'chat-inbox';
+
+				if (!isChatInbox) return false;
+
+				const filterKeyword = query.queryKey[1] as string | undefined;
+				const isFilterEmpty = !filterKeyword || filterKeyword === '';
+
+				if (isFilterEmpty) return true;
+
+				const escapedKeyword = filterKeyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+				const regex = new RegExp(`\\b.*${escapedKeyword}.*\\b`, 'i');
+				return regex.test(responseData.chatInbox.title);
+			}
 		},
 		(oldData) => {
 			if (!oldData) return oldData;

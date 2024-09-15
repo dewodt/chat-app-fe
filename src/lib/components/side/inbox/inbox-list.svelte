@@ -49,6 +49,7 @@
 	>({
 		queryKey: ['chat-inbox', debouncedSearch],
 		retry: 1,
+		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 		initialPageParam: undefined,
 		getNextPageParam: (lastPage) => {
