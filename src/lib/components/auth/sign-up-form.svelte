@@ -113,7 +113,7 @@
 	</Form.Field>
 
 	<!-- Sign Up -->
-	<Form.Button class="w-full">
+	<Form.Button class="w-full" disabled={$mutation.isPending}>
 		{#if $mutation.isPending}
 			<LoadingText />
 		{:else}

@@ -16,6 +16,6 @@
 
 <QueryClientProvider client={queryClient}>
 	<slot />
-	<Toaster theme="light" richColors position="top-right" closeButton />
+	<Toaster richColors position="top-right" closeButton />
 	<ModeWatcher defaultMode="light" />
 </QueryClientProvider>
