@@ -7,6 +7,8 @@
 	import { SendHorizontal } from 'lucide-svelte';
 	import {
 		sendMessageService,
+		sendStopTypingService,
+		sendTypingService,
 		updateSendMessageQueryDataInbox,
 		updateSendMessageQueryDataMessage,
 		type SendMessageError,
@@ -30,6 +32,10 @@
 			if (!form.valid) {
 				return;
 			}
+
+			// stop typing
+			clearTimeout(inputTimer);
+			stopTyping();
 
 			const chatId = $selectedChatStore!.chatId;
 			const { message } = $formData;
@@ -85,6 +91,35 @@
 	onMount(() => {
 		inputRef?.focus();
 	});
+
+	// Send input status
+	const typingTimeout = 1500;
+	let inputTimer: number | undefined;
+
+	const startTyping = () => {
+		// console.log('start');
+		sendTypingService({ chatId: $selectedChatStore!.chatId });
+	};
+
+	const stopTyping = () => {
+		// console.log('stopped');
+		sendStopTypingService({ chatId: $selectedChatStore!.chatId });
+		inputTimer = undefined;
+	};
+
+	const onTyping = () => {
+		if (!inputTimer) {
+			// Initial start typing
+			startTyping();
+
+			inputTimer = setTimeout(stopTyping, typingTimeout);
+		} else {
+			// Mid typing
+			// console.log('mid');
+			clearTimeout(inputTimer);
+			inputTimer = setTimeout(stopTyping, typingTimeout);
+		}
+	};
 </script>
 
 <form use:enhance class="flex flex-row gap-3.5 border-t bg-muted px-4 py-3.5">
@@ -97,6 +132,7 @@
 				autocomplete="off"
 				bind:value={$formData.message}
 				bind:ref={inputRef}
+				on:input={onTyping}
 				{...attrs}
 			/>
 		</Form.Control>

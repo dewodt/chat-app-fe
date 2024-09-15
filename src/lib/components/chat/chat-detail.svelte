@@ -8,6 +8,7 @@
 	import {
 		createInfiniteQuery,
 		createMutation,
+		createQuery,
 		useQueryClient,
 		type InfiniteData,
 		type QueryKey
@@ -21,7 +22,8 @@
 		type ReadChatRequestBody,
 		readChatService,
 		updateReadChatQueryDataInbox,
-		updateReadChatQueryDataMessage
+		updateReadChatQueryDataMessage,
+		getStatusService
 	} from '$lib/services/chats';
 	import LoadingFill from '$lib/components/shared/loading-fill.svelte';
 	import ErrorFill from '$lib/components/shared/error-fill.svelte';
@@ -32,6 +34,8 @@
 	import { afterUpdate } from 'svelte';
 	import SendMessageForm from './send-message-form.svelte';
 	import { ToastResponseFactory } from '$lib/components/ui/sonner';
+	import { listenEvent } from '$lib/utils/socket-io';
+	import { STATUS } from '$types';
 
 	// Component rerender every time selectedChatStore changes
 
@@ -52,7 +56,7 @@
 
 	// Get initial messages
 	const limit = 15;
-	$: query = createInfiniteQuery<
+	$: queryMessages = createInfiniteQuery<
 		GetChatMessageSuccessResponseBody,
 		GetChatMessageError,
 		InfiniteData<GetChatMessageSuccessResponseBody>,
@@ -111,13 +115,13 @@
 
 	// Fetch more messages when intersecting
 	$: {
-		if (isIntersecting && !$query.isFetchingNextPage && $query.hasNextPage) {
-			$query.fetchNextPage();
+		if (isIntersecting && !$queryMessages.isFetchingNextPage && $queryMessages.hasNextPage) {
+			$queryMessages.fetchNextPage();
 		}
 	}
 
 	// Flattened messages
-	$: allSortedMessages = $query.data?.pages.flatMap((page) => page.data).reverse() ?? [];
+	$: allSortedMessages = $queryMessages.data?.pages.flatMap((page) => page.data).reverse() ?? [];
 
 	const scrollToBottom = () => {
 		if (scrollViewport && scrollContent) {
@@ -126,7 +130,7 @@
 	};
 
 	// Initial chat open
-	// Note: scrollViewport & content only rendered IF $query.isSuccess and data is not empty
+	// Note: scrollViewport & content only rendered IF $queryMessages.isSuccess and data is not empty
 	$: {
 		if (isInitialChatOpen && scrollViewport && scrollContent) {
 			// Scroll
@@ -143,17 +147,55 @@
 	afterUpdate(() => {
 		if (!scrollViewport || !scrollContent) {
 			// nothing
-		} else if (isNormalScrollState && !$query.isFetchingNextPage) {
+		} else if (isNormalScrollState && !$queryMessages.isFetchingNextPage) {
 			// normal scroll state
-		} else if (isNormalScrollState && $query.isFetchingNextPage) {
+		} else if (isNormalScrollState && $queryMessages.isFetchingNextPage) {
 			// starts fetching next page
 			isNormalScrollState = false;
 			prevScrollHeight = scrollViewport.scrollHeight;
-		} else if (!isNormalScrollState && !$query.isFetchingNextPage) {
+		} else if (!isNormalScrollState && !$queryMessages.isFetchingNextPage) {
 			// done fetching next page
 			isNormalScrollState = true;
 			scrollViewport.scrollTop = scrollViewport.scrollHeight - prevScrollHeight;
 		}
+	});
+
+	// Online & typing state
+	let isOtherUserOnline = false;
+	let isOtherUserTyping = false;
+
+	// Handle initial status
+	const queryOtherUserOnline = createQuery({
+		enabled: !!$selectedChatStore,
+		retry: 1,
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
+		queryKey: ['status', $selectedChatStore?.chatId],
+		queryFn: async () => {
+			const responseBody = await getStatusService({ chatId: $selectedChatStore!.chatId });
+			return responseBody.data;
+		}
+	});
+	$: {
+		if ($queryOtherUserOnline.isSuccess) {
+			isOtherUserOnline = $queryOtherUserOnline.data?.status === STATUS.ONLINE;
+		}
+	}
+
+	// Listen typing event
+	listenEvent('typing', () => {
+		isOtherUserTyping = true;
+	});
+	listenEvent('stopTyping', () => {
+		isOtherUserTyping = false;
+	});
+
+	// Listen to future online status
+	listenEvent('userOnline', () => {
+		isOtherUserOnline = true;
+	});
+	listenEvent('userOffline', () => {
+		isOtherUserOnline = false;
 	});
 </script>
 
@@ -177,28 +219,33 @@
 			<div class="flex flex-row items-center gap-4">
 				<AvatarUser src={$selectedChatStore.avatarUrl} />
 
-				<div class="space-y-0.5">
+				<div class="space-y-px">
 					<!-- Title -->
 					<h4 class="line-clamp-1 text-start text-base font-medium">{$selectedChatStore.title}</h4>
 
 					<!-- Status -->
+					{#if isOtherUserTyping}
+						<p class="text-xs font-medium text-muted-foreground">Typing...</p>
+					{:else if isOtherUserOnline}
+						<p class="text-xs font-medium text-muted-foreground">Online</p>
+					{/if}
 				</div>
 			</div>
 		</header>
 
-		{#if $query.isPending}
+		{#if $queryMessages.isPending}
 			<LoadingFill />
 		{/if}
 
-		{#if $query.isError}
+		{#if $queryMessages.isError}
 			<ErrorFill
-				statusText={$query.error.response?.statusText}
-				message={$query.error.response?.data.message}
-				refetch={$query.refetch}
+				statusText={$queryMessages.error.response?.statusText}
+				message={$queryMessages.error.response?.data.message}
+				refetch={$queryMessages.refetch}
 			/>
 		{/if}
 
-		{#if $query.isSuccess}
+		{#if $queryMessages.isSuccess}
 			{#if allSortedMessages.length === 0}
 				<WarningFill message="No messages found" />
 			{:else}
@@ -216,7 +263,7 @@
 							<ol class="flex flex-col gap-4 px-6 py-6">
 								<!-- First sentinel -->
 								<li bind:this={element}>
-									{#if $query.isFetchingNextPage}
+									{#if $queryMessages.isFetchingNextPage}
 										<LoadingFill class="py-5" />
 									{/if}
 								</li>

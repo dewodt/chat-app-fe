@@ -7,6 +7,10 @@ export const socket = io(PUBLIC_BE_URL, {
 	withCredentials: true
 });
 
+export function emit<T>(eventName: string, data: T) {
+	socket.emit(eventName, data);
+}
+
 export function emitWithAck<T extends SuccessResponseDto<any>>(
 	eventName: string,
 	data: any,

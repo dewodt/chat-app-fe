@@ -1,5 +1,3 @@
-import type { ChatType } from '$lib/enums/chat';
-
 export interface Message {
 	messageId: string;
 	chatId: string;
@@ -13,7 +11,6 @@ export interface Message {
 
 export interface Chat {
 	chatId: string;
-	type: ChatType;
 	title: string;
 	avatarUrl: string | null;
 }
@@ -26,4 +23,14 @@ export interface ChatInbox extends Chat {
 		createdAt: string;
 		deletedAt: string | null;
 	} | null;
+}
+
+export enum STATUS {
+	ONLINE = 'ONLINE',
+	OFFLINE = 'OFFLINE'
+}
+
+export enum TYPING {
+	TYPING = 'TYPING',
+	NOT_TYPING = 'NOT_TYPING'
 }
