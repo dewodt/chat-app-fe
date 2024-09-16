@@ -22,13 +22,6 @@
 	import { selectedChatStore } from '$lib/stores';
 	import { getRelativeTime } from '$lib/utils/datetime';
 	import { joinChatRoomsService } from '$lib/services/chats/join-chatrooms';
-	import {
-		readChatService,
-		type ReadChatError,
-		type ReadChatRequestBody,
-		type ReadChatSuccessResponseBody
-	} from '$lib/services/chats';
-	import { ToastResponseFactory } from '$lib/components/ui/sonner';
 
 	// Props
 	export let debouncedSearch: string;

@@ -25,6 +25,7 @@
 	} from '$lib/services/chats/new-chat';
 	import { ToastResponseFactory } from '$lib/components/ui/sonner';
 	import { openChat } from '$lib/stores';
+	import { joinChatRoomsService } from '$lib/services/chats';
 
 	export let debouncedSearch: string;
 	export let isPopupOpen: boolean;
@@ -84,7 +85,13 @@
 			// await new Promise((resolve) => setTimeout(resolve, 3000));
 			// throw new Error('An error occurred while creating chat');
 
+			// Get previously or new chat inbox
 			const responseBody = await newChatService(userId);
+
+			// Join chat room
+			const chatIds = [responseBody.data.chatId];
+			await joinChatRoomsService({ chatIds });
+
 			return responseBody;
 		},
 		onMutate: () => {

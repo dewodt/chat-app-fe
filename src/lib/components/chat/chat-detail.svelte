@@ -170,7 +170,7 @@
 		retry: 1,
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
-		queryKey: ['status', $selectedChatStore?.chatId],
+		queryKey: ['status', $selectedChatStore?.chatId, Date.now()],
 		queryFn: async () => {
 			const responseBody = await getStatusService({ chatId: $selectedChatStore!.chatId });
 			return responseBody.data;
